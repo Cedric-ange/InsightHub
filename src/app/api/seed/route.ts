@@ -8,11 +8,13 @@ const CHANNELS = ["Hypermarché", "Supermarché", "Boutique", "Kiosque"];
 const now = Date.now();
 const day = 86_400_000;
 
+export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
-    // Élimination du linter error sur l'inutilisation de password
+    // Utilisation de Omit pour typer strictement un utilisateur sans son mot de passe
     const users = DEMO_ACCOUNTS.map((account) => {
-      const { password: _password, ...userWithoutPassword } = account;
+      const { password, ...userWithoutPassword } = account;
+      void password; // Indique explicitement au compilateur que l'isolement est volontaire
       return userWithoutPassword;
     });
     
