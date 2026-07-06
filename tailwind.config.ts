@@ -9,23 +9,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Identité Institutionnelle FrieslandCampina (Remplace l'ancien bleu générique)
         brand: {
-          50: "#eef4ff",
-          100: "#d9e6ff",
-          200: "#bcd2ff",
-          300: "#8eb4ff",
-          400: "#598bff",
-          500: "#3563eb",
-          600: "#2145d1",
-          700: "#1c37a8",
-          800: "#1c3288",
-          900: "#1d2f6c",
-          950: "#151d40",
+          50: "#f0f6fc",
+          100: "#e1ecf7",
+          200: "#b8d4ee",
+          300: "#7fb2e0",
+          400: "#408ece",
+          500: "#005CA9", // Bleu Royal FrieslandCampina officiel
+          600: "#004b8c",
+          700: "#003c71",
+          800: "#00335e",
+          900: "#012b4e",
+          950: "#001b33",
         },
+        // Identité Visuelle Bonnet Rouge (Idéal pour l'action, l'urgence et le terrain)
         accent: {
-          500: "#0ea5a4",
-          600: "#0d9488",
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#D32F2F", // Rouge Bonnet Rouge officiel
+          600: "#B71C1C", // Rouge Foncé pour les états de survol
+          700: "#991b1b",
+          800: "#7f1d1d",
+          900: "#450a0a",
         },
+        // Palettes secondaires spécifiques à la marque FrieslandCampina / Bonnet Rouge
+        bonnetRouge: {
+          gold: "#FBC02D",   // Or/Jaune iconique (Notation, NPS, Étoiles)
+          cream: "#FFFDE7",  // Blanc crème (Fonds de carte légers, Onboarding)
+          green: "#009639",  // Vert FrieslandCampina (Indicateurs positifs, "Synchronisé")
+        }
       },
       fontFamily: {
         sans: [
@@ -42,4 +58,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;
