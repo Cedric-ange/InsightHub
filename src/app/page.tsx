@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth";
+import { landingPath, useAuth } from "@/lib/auth";
 
 export default function Home() {
   const router = useRouter();
   const user = useAuth((s) => s.user);
 
   useEffect(() => {
-    router.replace(user ? "/dashboard" : "/login");
+    router.replace(user ? landingPath(user.role) : "/login");
   }, [user, router]);
 
   return (
