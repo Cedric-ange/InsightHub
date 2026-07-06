@@ -13,7 +13,7 @@ export interface DemoAccount extends User {
 export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_admin",
-    name: "Cédric N'Guessan",
+    name: "Cédric Touré",
     email: "admin@insighthub.ci",
     role: "ADMIN",
     region: "Abidjan",
@@ -23,7 +23,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   },
   {
     id: "u_manager",
-    name: "Awa Koné",
+    name: "Patrick Epee",
     email: "manager@insighthub.ci",
     role: "MANAGER",
     region: "Abidjan",
@@ -33,7 +33,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   },
   {
     id: "u_analyst",
-    name: "Yao Kouassi",
+    name: "Delaure Dian",
     email: "analyst@insighthub.ci",
     role: "ANALYST",
     region: "Abidjan",
@@ -43,7 +43,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   },
   {
     id: "u_supervisor",
-    name: "Fatou Diarra",
+    name: "Sonia Kouman",
     email: "superviseur@insighthub.ci",
     role: "SUPERVISOR",
     region: "Bouaké",
