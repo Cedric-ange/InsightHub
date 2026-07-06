@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DEMO_ACCOUNTS, useAuth } from "@/lib/auth";
+import { DEMO_ACCOUNTS, landingPath, useAuth } from "@/lib/auth";
 import { ROLE_LABELS } from "@/lib/types";
 import { LogIn, ChevronRight } from "lucide-react";
 
@@ -17,8 +17,10 @@ export default function LoginPage() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const res = login(email, password);
-    if (res.ok) router.replace("/dashboard");
-    else setError(res.error ?? "Erreur");
+    if (res.ok) {
+      const { user } = useAuth.getState();
+      router.replace(landingPath(user?.role));
+    } else setError(res.error ?? "Erreur");
   };
 
   return (
@@ -110,7 +112,7 @@ export default function LoginPage() {
                   key={acc.id}
                   onClick={() => {
                     loginAs(acc);
-                    router.replace("/dashboard");
+                    router.replace(landingPath(acc.role));
                   }}
                   className="flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-left text-sm hover:border-brand-300 hover:bg-brand-50"
                 >

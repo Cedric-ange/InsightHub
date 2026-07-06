@@ -114,3 +114,22 @@ export function canAccess(role: Role | undefined, area: string): boolean {
   const allowed = ROLE_ACCESS[area];
   return !allowed || allowed.includes(role);
 }
+
+// Order in which areas are offered as a landing page after login. The first
+// area the role can access becomes its home (e.g. FIELD_AGENT -> /collect),
+// which avoids redirect loops for roles without dashboard access.
+const LANDING_ORDER = [
+  "dashboard",
+  "collect",
+  "studies",
+  "audit-prix",
+  "merchandising",
+  "analytics",
+  "validation",
+  "admin",
+] as const;
+
+export function landingPath(role: Role | undefined): string {
+  const area = LANDING_ORDER.find((a) => canAccess(role, a));
+  return `/${area ?? "login"}`;
+}

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
-import { canAccess, useAuth } from "@/lib/auth";
+import { canAccess, landingPath, useAuth } from "@/lib/auth";
 import { NAV_ITEMS } from "@/components/layout/nav";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       (n) => pathname === n.href || pathname.startsWith(n.href + "/"),
     );
     if (nav && !canAccess(user.role, nav.area)) {
-      router.replace("/dashboard");
+      router.replace(landingPath(user.role));
       return;
     }
     setReady(true);
