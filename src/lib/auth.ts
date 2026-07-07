@@ -14,7 +14,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_admin",
     name: "Cédric Touré",
-    email: "admin@insighthub.ci",
+    email: "toure.cedric@frieslandcampina.com",
     role: "ADMIN",
     region: "Abidjan",
     active: true,
@@ -24,7 +24,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_manager",
     name: "Patrick Epee",
-    email: "manager@insighthub.ci",
+    email: "epee.patrick@frieslandcampina.com",
     role: "MANAGER",
     region: "Abidjan",
     active: true,
@@ -34,7 +34,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_analyst",
     name: "Delaure Dian",
-    email: "analyst@insighthub.ci",
+    email: "dian.delaure@frieslandcampina.com",
     role: "ANALYST",
     region: "Abidjan",
     active: true,
@@ -44,7 +44,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_supervisor",
     name: "Sonia Kouman",
-    email: "superviseur@insighthub.ci",
+    email: "kouman.sonia@frieslandcampina.com",
     role: "SUPERVISOR",
     region: "Bouaké",
     active: true,
@@ -54,7 +54,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_agent",
     name: "Moussa Traoré",
-    email: "enqueteur@insighthub.ci",
+    email: "marie.jeanne@frieslandcampina.com",
     role: "FIELD_AGENT",
     region: "San Pedro",
     active: true,

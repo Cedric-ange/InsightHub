@@ -2,4 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-neutral-light text-neutral-dark antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
 
+/* Réparation des espacements de formulaires */
+input, select, textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all;
+}
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}

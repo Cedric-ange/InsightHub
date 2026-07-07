@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
-// Configuration des données proches du marché Bonnet Rouge à Abidjan
+// Configuration fine alignée sur le marché FrieslandCampina en Côte d'Ivoire
 const REGIONS = ["Abidjan - Lagunes", "Bouaké - Vallée du Bandama", "San Pedro - Bas-Sassandra"];
 const OUTLETS = ["Prosuma (Hayat)", "Carrefour Marcory", "CDCI Yopougon", "Boutique de quartier Adjamé"];
 const CHANNELS = ["Supermarché", "Hypermarché", "Maxi Discompte", "Boutique Traditionnelle"];
@@ -12,24 +12,26 @@ const day = 86_400_000;
 
 export async function GET() {
   try {
-    // 1. CRÉATION DES COMPTES DE TEST (Pour l'Onboarding / Simulation)
-    // Ces comptes permettent de guider l'utilisateur sans polluer la liste des vrais agents de prod.
+    // 1. SYNCHRONISATION DES COMPTES CORPORATE (Pour l'Onboarding / Simulation)
+    // Insertion de la liste calquée sur le fichier auth.ts pour lier le front et la base Supabase
     const testUsers = [
-      { id: "u_test_analyst", name: "Anonyme (Test Analyste)", email: "test.analyst@insighthub.ci", role: "ANALYST", active: true, created_at: now },
-      { id: "u_test_agent", name: "Moussa (Test Enquêteur)", email: "test.enqueteur@insighthub.ci", role: "FIELD_AGENT", active: true, created_at: now }
+      { id: "u_admin", name: "Cédric Touré", email: "toure.cedric@frieslandcampina.com", role: "ADMIN", active: true, created_at: now },
+      { id: "u_manager", name: "Patrick Epee", email: "epee.patrick@frieslandcampina.com", role: "MANAGER", active: true, created_at: now },
+      { id: "u_analyst", name: "Delaure Dian", email: "dian.delaure@frieslandcampina.com", role: "ANALYST", active: true, created_at: now },
+      { id: "u_supervisor", name: "Sonia Kouman", email: "kouman.sonia@frieslandcampina.com", role: "SUPERVISOR", active: true, created_at: now },
+      { id: "u_agent", name: "Moussa Traoré", email: "marie.jeanne@frieslandcampina.com", role: "FIELD_AGENT", active: true, created_at: now }
     ];
     
     const { error: userError } = await supabase.from('users').upsert(testUsers);
     if (userError) throw userError;
 
-    // 2. CONFIGURATION D'UNE ÉTUDE GUIDE (Modèle 6P - Lancement Bonnet Rouge Poudre)
-    // Sert de modèle de référence pour montrer comment l'IBP exploite les données
+    // 2. CONFIGURATION DE L'ÉTUDE GUIDE (Modèle 6P - Lancement Bonnet Rouge Poudre)
     const onboardingStudy = {
       id: "study_onboarding_bonnet_rouge",
       title: "[GUIDE] Évaluation Lancement Bonnet Rouge Format Familial",
       category: "product_launch",
       status: "published",
-      created_by: "u_test_analyst",
+      created_by: "u_admin", // Lié au compte administrateur principal
       created_at: now - 5 * day,
       updated_at: now - 1 * day,
       questions: [
@@ -44,16 +46,25 @@ export async function GET() {
     const { error: studyError } = await supabase.from('studies').upsert([onboardingStudy]);
     if (studyError) throw studyError;
 
-    // 3. JEU DE DONNÉES SIMULÉES (Historique pour alimenter les graphiques d'Analytics)
-    // Permet de simuler un historique d'audit pour le Lait Bonnet Rouge vs Concurrents (ex: Peak, Nestlé)
+    // 3. HISTORIQUE DE DONNÉES DE MARCHÉ (Pour alimenter vos composants graphiques)
     const mockPriceAudits = [];
-    const productsList = ["Bonnet Rouge Concentré 160g", "Bonnet Rouge Poudre Familial", "Concurrent Lait Concentré"];
+    const productsList = ["Bonnet Rouge Concentré 160g", "Bonnet Rouge Poudre Familial", "Nestlé Bonnet Vert", "Peak Lait"];
     
-    for (let i = 0; i < 15; i++) {
-      const isBR = i % 3 !== 0; // 2 tiers des données sur Bonnet Rouge
-      const productSelected = isBR ? productsList[i % 2] : productsList[2];
-      const brandSelected = isBR ? "Bonnet Rouge" : "Concurrent Principal";
+    for (let i = 0; i < 40; i++) { // Augmenté à 40 entrées pour des graphiques plus denses et réalistes
+      const mod = i % 4;
+      const isBR = mod < 2; // Les 2 premiers produits appartiennent à FrieslandCampina
+      const productSelected = productsList[mod];
       
+      let brandSelected = "Bonnet Rouge";
+      if (mod === 2) brandSelected = "Nestlé";
+      if (mod === 3) brandSelected = "Peak";
+      
+      // Détermination d'un prix cohérent en FCFA selon le produit
+      let targetPrice = 500;
+      if (productSelected === "Bonnet Rouge Poudre Familial") targetPrice = 1200;
+      if (productSelected === "Nestlé Bonnet Vert") targetPrice = 450;
+      if (productSelected === "Peak Lait") targetPrice = 550;
+
       mockPriceAudits.push({
         id: `pa_guide_${i}`,
         outlet: OUTLETS[i % OUTLETS.length],
@@ -61,14 +72,14 @@ export async function GET() {
         brand: brandSelected,
         is_own_brand: isBR,
         product: productSelected,
-        price: brandSelected === "Bonnet Rouge" ? (i % 2 === 0 ? 500 : 1200) : 550,
+        price: targetPrice + (i % 3 === 0 ? 50 : 0) - (i % 5 === 0 ? 25 : 0), // Simule de légères variations de prix sur le marché
         promo: i % 4 === 0,
-        available: i % 7 !== 0,
-        facings: 2 + (i % 4),
+        available: i % 9 !== 0,
+        facings: isBR ? 3 + (i % 3) : 2 + (i % 2), // Donne un léger avantage de part linéaire à Bonnet Rouge
         region: REGIONS[i % REGIONS.length],
-        agent_name: "Moussa (Test Enquêteur)",
+        agent_name: i % 2 === 0 ? "Moussa Traoré" : "Sonia Kouman",
         sync_status: "synced",
-        created_at: now - (i * 12 * 3600 * 1000) // Données réparties sur les derniers jours
+        created_at: now - (i * 6 * 3600 * 1000) // Données fluides étalées sur les dernières semaines
       });
     }
     
@@ -77,12 +88,8 @@ export async function GET() {
 
     return NextResponse.json({ 
       success: true, 
-      message: "FIP Onboarding Guide : Mode simulation initialisé avec succès pour Bonnet Rouge Abidjan !",
-      guide: {
-        compte_test_analyst: "test.analyst@insighthub.ci",
-        compte_test_enqueteur: "test.enqueteur@insighthub.ci",
-        methode: "Utilisez ces comptes pour faire vos simulations sans impacter la production réelle."
-      }
+      message: "FIP Database : Base Supabase réinitialisée et alimentée avec succès avec la charte @frieslandcampina.com !",
+      synchronizedAccounts: testUsers.map(u => u.email)
     });
   } catch (error) {
     console.error("Erreur durant l'initialisation du Guide d'Onboarding :", error);
