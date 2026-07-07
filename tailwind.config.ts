@@ -9,23 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // FrieslandCampina "Bonnet Rouge" — rouge officiel comme couleur de marque.
         brand: {
-          50: "#eef4ff",
-          100: "#d9e6ff",
-          200: "#bcd2ff",
-          300: "#8eb4ff",
-          400: "#598bff",
-          500: "#3563eb",
-          600: "#2145d1",
-          700: "#1c37a8",
-          800: "#1c3288",
-          900: "#1d2f6c",
-          950: "#151d40",
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f2555a",
+          500: "#D32F2F", // Rouge Bonnet Rouge officiel
+          600: "#B71C1C", // Rouge foncé (survol / états actifs)
+          700: "#991b1b",
+          800: "#7f1d1d",
+          900: "#601010",
+          950: "#3f0a0a",
         },
         accent: {
-          500: "#0ea5a4",
-          600: "#0d9488",
+          // Vert FrieslandCampina — indicateurs positifs / "Synchronisé".
+          500: "#009639",
+          600: "#00792e",
         },
+        gold: "#FBC02D", // Or iconique (notation, NPS, étoiles)
+        cream: "#FFFDE7", // Blanc crème (fonds légers)
       },
       fontFamily: {
         sans: [

@@ -187,7 +187,256 @@ const availStudy: Study = {
   ],
 };
 
-const STUDIES: Study[] = [tasteStudy, homeStudy, availStudy];
+// ---- Consumer Connect : guides d'entretien par type d'interlocuteur ----
+// Guides qualitatifs FrieslandCampina (lait en poudre / évaporé / UHT).
+
+const guideRetail: Study = {
+  id: "guide_retail",
+  title: "Consumer Connect — Grande distribution",
+  description:
+    "Guide d'entretien chef de rayon / manager (Auchan, Prosuma, Carrefour). Référencement, promotions, ruptures et réaction prix.",
+  category: "consumer",
+  status: "published",
+  createdBy: "u_manager",
+  createdAt: now - 2 * day,
+  updatedAt: now - day,
+  questions: [
+    {
+      id: "gr_refs",
+      type: "long_text",
+      label:
+        "Quelles sont les références les plus vendues en lait en poudre, évaporé et UHT ?",
+      required: true,
+      sixp: "PRODUCT",
+    },
+    {
+      id: "gr_nego",
+      type: "single_choice",
+      label:
+        "Qui négocie le référencement et les têtes de gondole ?",
+      required: true,
+      options: ["Le siège", "Le magasin", "Les deux"],
+      sixp: "PLACE",
+    },
+    {
+      id: "gr_promo",
+      type: "long_text",
+      label:
+        "Quelles marques poussent le plus de promotions (2-for-1, prix barré) et à quelle fréquence ?",
+      required: true,
+      sixp: "PROMOTION",
+    },
+    {
+      id: "gr_rupture",
+      type: "boolean",
+      label: "Y a-t-il des ruptures de stock fréquentes ?",
+      required: true,
+      sixp: "PLACE",
+    },
+    {
+      id: "gr_rupture_which",
+      type: "text",
+      label: "Sur quelles marques ?",
+      required: false,
+      sixp: "PLACE",
+      condition: { questionId: "gr_rupture", equals: ["true"] },
+    },
+    {
+      id: "gr_price_reaction",
+      type: "long_text",
+      label:
+        "Comment les clients réagissent-ils à un changement de prix sur le lait ?",
+      required: true,
+      sixp: "PRICE",
+    },
+  ],
+};
+
+const guideTraditional: Study = {
+  id: "guide_traditional",
+  title: "Consumer Connect — Marché traditionnel / boutique",
+  description:
+    "Guide d'entretien commerçant / grossiste de quartier. Formats, approvisionnement, réassort et appui commercial.",
+  category: "consumer",
+  status: "published",
+  createdBy: "u_manager",
+  createdAt: now - 2 * day,
+  updatedAt: now - day,
+  questions: [
+    {
+      id: "gt_formats",
+      type: "multi_choice",
+      label: "Quels formats se vendent le mieux ?",
+      required: true,
+      options: ["Sachet", "Boîte", "Pack"],
+      sixp: "PACK",
+    },
+    {
+      id: "gt_formats_why",
+      type: "long_text",
+      label: "Pourquoi ces formats ?",
+      required: false,
+      sixp: "PACK",
+    },
+    {
+      id: "gt_supply",
+      type: "single_choice",
+      label: "Comment vous approvisionnez-vous ?",
+      required: true,
+      options: [
+        "Directement chez le distributeur",
+        "Via un grossiste intermédiaire",
+        "Les deux",
+      ],
+      sixp: "PLACE",
+    },
+    {
+      id: "gt_restock",
+      type: "text",
+      label: "Quel est le délai et la fréquence de réassort ?",
+      required: true,
+      sixp: "PLACE",
+    },
+    {
+      id: "gt_brand_ask",
+      type: "single_choice",
+      label: "Les clients demandent-ils une marque précise ?",
+      required: true,
+      options: [
+        "Une marque précise",
+        "Le moins cher disponible",
+        "Cela dépend",
+      ],
+      sixp: "PROPOSITION",
+    },
+    {
+      id: "gt_support",
+      type: "long_text",
+      label:
+        "Y a-t-il des marques qui offrent du crédit, des présentoirs ou un appui commercial ?",
+      required: false,
+      sixp: "PROMOTION",
+    },
+  ],
+};
+
+const guideDistributor: Study = {
+  id: "guide_distributor",
+  title: "Consumer Connect — Distributeur / importateur",
+  description:
+    "Guide d'entretien distributeur / importateur. Volumes, saisonnalité, marges par échelon et barrières logistiques.",
+  category: "consumer",
+  status: "published",
+  createdBy: "u_manager",
+  createdAt: now - 2 * day,
+  updatedAt: now - day,
+  questions: [
+    {
+      id: "gd_volumes",
+      type: "long_text",
+      label:
+        "Quels sont les volumes et la saisonnalité de la demande (Ramadan, rentrée scolaire, etc.) ?",
+      required: true,
+      sixp: "PLACE",
+    },
+    {
+      id: "gd_margins",
+      type: "long_text",
+      label:
+        "Quelles sont les marges pratiquées à chaque échelon (import → grossiste → détaillant) ?",
+      required: true,
+      sixp: "PRICE",
+    },
+    {
+      id: "gd_barriers",
+      type: "long_text",
+      label:
+        "Quelles barrières logistiques ou douanières freinent le plus l'activité ?",
+      required: true,
+      sixp: "PLACE",
+    },
+    {
+      id: "gd_modern_trade",
+      type: "long_text",
+      label:
+        "Comment perçoivent-ils l'arrivée de nouveaux acteurs de la distribution moderne (Coopérative U, etc.) ?",
+      required: false,
+      sixp: "PROPOSITION",
+    },
+  ],
+};
+
+const guideConsumer: Study = {
+  id: "guide_consumer",
+  title: "Consumer Connect — Consommateurs",
+  description:
+    "Guide d'entretien consommateur en sortie de marché / point de vente. Critères de choix, usage, confiance de marque et budget.",
+  category: "consumer",
+  status: "published",
+  createdBy: "u_analyst",
+  createdAt: now - 2 * day,
+  updatedAt: now - day,
+  questions: [
+    {
+      id: "gc_criteria",
+      type: "single_choice",
+      label: "Qu'est-ce qui compte le plus dans le choix ?",
+      required: true,
+      options: ["Prix", "Marque", "Format", "Habitude familiale"],
+      sixp: "PROPOSITION",
+    },
+    {
+      id: "gc_usage",
+      type: "long_text",
+      label:
+        "Le lait en poudre est-il perçu différemment de l'UHT en termes d'usage (thé/café vs boisson) ?",
+      required: false,
+      sixp: "PRODUCT",
+    },
+    {
+      id: "gc_trust",
+      type: "boolean",
+      label:
+        "Y a-t-il une marque de confiance transmise par les parents / la famille ?",
+      required: true,
+      sixp: "PROPOSITION",
+    },
+    {
+      id: "gc_trust_which",
+      type: "text",
+      label: "Laquelle ?",
+      required: false,
+      sixp: "PROPOSITION",
+      condition: { questionId: "gc_trust", equals: ["true"] },
+    },
+    {
+      id: "gc_budget",
+      type: "single_choice",
+      label:
+        "Le budget mensuel alloué aux produits laitiers a-t-il changé récemment ?",
+      required: true,
+      options: ["A augmenté", "Est stable", "A diminué"],
+      sixp: "PRICE",
+    },
+    {
+      id: "gc_nps",
+      type: "nps",
+      label: "Recommanderiez-vous votre marque de lait actuelle ? (NPS)",
+      required: true,
+      sixp: "PROPOSITION",
+    },
+  ],
+};
+
+const STUDIES: Study[] = [
+  guideRetail,
+  guideTraditional,
+  guideDistributor,
+  guideConsumer,
+  tasteStudy,
+  homeStudy,
+  availStudy,
+];
 
 function seedSubmissions(): Submission[] {
   const subs: Submission[] = [];
@@ -292,7 +541,8 @@ export async function seedIfEmpty(): Promise<void> {
     await db.users.bulkAdd(users);
   }
 
-  if ((await db.studies.count()) === 0) await db.studies.bulkAdd(STUDIES);
+  // Upsert canonical studies (by id) so returning users also get new guides.
+  await db.studies.bulkPut(STUDIES);
   if ((await db.submissions.count()) === 0)
     await db.submissions.bulkAdd(seedSubmissions());
   if ((await db.priceAudits.count()) === 0)
