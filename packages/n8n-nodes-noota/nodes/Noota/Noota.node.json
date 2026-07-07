@@ -1,0 +1,17 @@
+{
+  "node": "n8n-nodes-noota.Noota",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Productivity"],
+  "subcategories": {
+    "Productivity": ["Meetings & Calls"]
+  },
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://noota.readme.io/reference/welcome"
+      }
+    ]
+  },
+  "alias": ["noota", "meeting", "recording", "transcript", "report", "summary"]
+}
