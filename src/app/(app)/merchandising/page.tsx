@@ -22,7 +22,7 @@ const POSITIONS: { v: MerchAudit["shelfPosition"]; l: string }[] = [
   { v: "middle", l: "Milieu" },
   { v: "bottom", l: "Bas" },
 ];
-const PIE = ["#2145d1", "#0ea5a4", "#f59e0b", "#ef4444", "#8b5cf6"];
+const PIE = ["#D32F2F", "#009639", "#FBC02D", "#0ea5a4", "#8b5cf6"];
 
 export default function MerchandisingPage() {
   const user = useAuth((s) => s.user);

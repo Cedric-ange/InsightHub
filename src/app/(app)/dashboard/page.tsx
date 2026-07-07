@@ -32,7 +32,7 @@ import { PageHeader, StatCard, Card } from "@/components/ui";
 import { formatFCFA } from "@/lib/utils";
 import { GpsMap } from "@/components/GpsMap";
 
-const PIE = ["#2145d1", "#0ea5a4", "#f59e0b", "#ef4444", "#8b5cf6"];
+const PIE = ["#D32F2F", "#009639", "#FBC02D", "#0ea5a4", "#8b5cf6"];
 
 export default function DashboardPage() {
   const data = useLiveQuery(async () => {
@@ -118,7 +118,7 @@ export default function DashboardPage() {
               <Line
                 type="monotone"
                 dataKey="interviews"
-                stroke="#2145d1"
+                stroke="#D32F2F"
                 strokeWidth={2}
                 dot={false}
               />
@@ -138,7 +138,7 @@ export default function DashboardPage() {
               <Tooltip formatter={(v: number) => formatFCFA(v)} />
               <Bar dataKey="avgPrice" radius={[4, 4, 0, 0]}>
                 {brands.map((b, i) => (
-                  <Cell key={i} fill={b.isOwn ? "#2145d1" : "#94a3b8"} />
+                  <Cell key={i} fill={b.isOwn ? "#D32F2F" : "#94a3b8"} />
                 ))}
               </Bar>
             </BarChart>

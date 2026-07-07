@@ -42,7 +42,7 @@ export function GpsMap({
         preserveAspectRatio="none"
         className="h-full w-full"
       >
-        <rect x={0} y={0} width={w} height={h} fill="#eef4ff" />
+        <rect x={0} y={0} width={w} height={h} fill="#fef2f2" />
         {valid.map((p, i) => {
           const { x, y } = project(p);
           return (
@@ -51,7 +51,7 @@ export function GpsMap({
               cx={x}
               cy={y}
               r={1.1}
-              fill="#2145d1"
+              fill="#D32F2F"
               fillOpacity={0.7}
             />
           );
