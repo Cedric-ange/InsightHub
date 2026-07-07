@@ -5,12 +5,14 @@ import { PageHeader } from "@/components/ui";
 
 export default function NewStudyPage() {
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
-        title="Nouvelle étude"
-        subtitle="Composez votre questionnaire question par question."
+        title="Nouvelle Étude Corporate"
+        subtitle="Composez votre grille d'évaluation stratégique question par question pour le terrain."
       />
-      <StudyBuilder />
+      <div className="bg-white border border-slate-100 rounded-2xl p-2 shadow-sm">
+        <StudyBuilder />
+      </div>
     </div>
   );
 }
