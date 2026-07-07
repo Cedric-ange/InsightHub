@@ -4,7 +4,8 @@
 
 @layer base {
   body {
-    @apply bg-neutral-light text-neutral-dark antialiased;
+    /* Remplacement par des classes natives Tailwind valides */
+    @apply bg-slate-50 text-slate-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
