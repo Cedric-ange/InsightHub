@@ -27,7 +27,13 @@ const NAV_ITEMS = [
   { id: "admin", label: "Administration", href: "/admin", icon: ShieldAlert },
 ];
 
-export function Sidebar() {
+// 1. Définition du type pour accepter onNavigate
+interface SidebarProps {
+  onNavigate?: () => void;
+}
+
+// 2. Injection des Props dans le composant
+export function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const user = useAuth((s) => s.user);
 
@@ -74,6 +80,8 @@ export function Sidebar() {
             <Link
               key={item.id}
               href={item.href}
+              // 3. Déclenchement de la fermeture du menu mobile lors du clic
+              onClick={onNavigate}
               className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? "bg-brand-500 text-white shadow-md shadow-brand-500/10 font-semibold" 
