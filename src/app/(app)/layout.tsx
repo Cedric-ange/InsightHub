@@ -16,7 +16,6 @@ export default function AppLayout({
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  // Bloque le rendu dynamique tant que Zustand n'est pas réhydraté sur le client
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -26,12 +25,14 @@ export default function AppLayout({
     router.replace("/login");
   };
 
+  // Tant que l'application n'est pas montée sur le client, on affiche un écran d'attente propre
+  // INTÉGRÉ à l'intérieur de l'application, sans casser les balises html/body globales
   if (!isMounted) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Chargement session corporate...</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Chargement de l&apos;application...</p>
         </div>
       </div>
     );
@@ -39,12 +40,12 @@ export default function AppLayout({
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* 1. SIDEBAR POUR LES ÉCRANS DESKTOP */}
+      {/* SIDEBAR DESKTOP */}
       <div className="hidden lg:flex lg:flex-shrink-0">
         <Sidebar />
       </div>
 
-      {/* 2. MENU MOBILE TEMPORAIRE (DRAWER) */}
+      {/* MENU MOBILE */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div 
@@ -65,10 +66,9 @@ export default function AppLayout({
         </div>
       )}
 
-      {/* 3. CONTENEUR PRINCIPAL DE L'APPLICATION */}
+      {/* CONTENEUR PRINCIPAL */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        
-        {/* BARRE SUPÉRIEURE (HEADER) AVEC BADGES PREMIUM CORRIGÉS */}
+        {/* HEADER */}
         <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-sm z-10">
           <div className="flex items-center gap-4">
             <button
@@ -78,7 +78,6 @@ export default function AppLayout({
               <Menu size={20} />
             </button>
 
-            {/* BADGES DE STATUT RÉRESTRUCTURÉS EN PILULES UX */}
             <div className="flex items-center gap-2 select-none">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -92,7 +91,6 @@ export default function AppLayout({
             </div>
           </div>
 
-          {/* ESPACE UTILISATEUR & DECONNEXION */}
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex flex-col text-right">
               <span className="text-xs font-bold text-slate-800">{user?.name || "Collaborateur"}</span>
@@ -108,7 +106,7 @@ export default function AppLayout({
           </div>
         </header>
 
-        {/* 4. CONTENU DE CHAQUE PAGE DÉPLOYÉE */}
+        {/* ZONE DE CONTENU */}
         <main className="flex-1 overflow-y-auto bg-slate-50/50 p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {children}

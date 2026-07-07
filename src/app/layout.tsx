@@ -1,107 +1,40 @@
-"use client";
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+import { AppProviders } from "@/components/AppProviders";
 
-import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Menu, X, LogOut } from "lucide-react";
-import { useAuth } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+export const metadata: Metadata = {
+  title: "InsightHub — FrieslandCampina FIP",
+  description:
+    "Plateforme propriétaire de Market & Consumer Intelligence : collecte terrain offline, audit prix, merchandising et analytics IBP/6P pour Bonnet Rouge.",
+  manifest: "/manifest.webmanifest",
+  applicationName: "InsightHub",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "InsightHub",
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
+};
 
-export default function AppLayout({
+export const viewport: Viewport = {
+  themeColor: "#D32F2F",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
+
+export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    logout();
-    router.replace("/login");
-  };
-
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* 1. SIDEBAR POUR LES ÉCRANS DESKTOP */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
-      </div>
-
-      {/* 2. MENU MOBILE TEMPORAIRE (DRAWER) */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          {/* Backdrop de fermeture */}
-          <div 
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" 
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="absolute inset-y-0 left-0 w-64 flex flex-col bg-slate-950 animate-in slide-in-from-left duration-200">
-            <div className="absolute top-4 right-4 z-50">
-              <button 
-                onClick={() => setMobileOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            {/* Version corrigée acceptant la prop onNavigate fermant le volet mobile */}
-            <Sidebar onNavigate={() => setMobileOpen(false)} />
-          </div>
-        </div>
-      )}
-
-      {/* 3. CONTENEUR PRINCIPAL DE L'APPLICATION */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        
-        {/* BARRE SUPÉRIEURE (HEADER) AVEC BADGES CORRIGÉS */}
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-sm z-10">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="p-2 -ml-2 rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden"
-            >
-              <Menu size={20} />
-            </button>
-
-            {/* LES BADGES DE STATUT RÉRESTRUCTURÉS EN PILULES UX PREMIUM */}
-            <div className="flex items-center gap-2 select-none">
-              {/* Pilule "En ligne" avec pulsation dynamique */}
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                En ligne
-              </span>
-
-              {/* Pilule "9 à synchroniser" unifiée et raffinée */}
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-amber-500 animate-bounce" />
-                9 en attente
-              </span>
-            </div>
-          </div>
-
-          {/* ESPACE UTILISATEUR & BOUTON DE DÉCONNEXION */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex flex-col text-right">
-              <span className="text-xs font-bold text-slate-800">{user?.name}</span>
-              <span className="text-[10px] text-slate-400 font-medium">Côte d&apos;Ivoire</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50/50 transition-colors group"
-              title="Se déconnecter de la session corporate"
-            >
-              <LogOut size={18} className="group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
-        </header>
-
-        {/* 4. CONTENU DE CHAQUE PAGE DÉPLOYÉE */}
-        <main className="flex-1 overflow-y-auto bg-slate-50/50 p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
+    <html lang="fr">
+      <body className="font-sans antialiased text-slate-900 bg-slate-50">
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
   );
 }
