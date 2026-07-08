@@ -14,7 +14,7 @@ const REGIONS = ["Abidjan", "Bouaké", "San Pedro", "Yamoussoukro"];
 const ROLE_STYLE: Record<Role, string> = {
   ADMIN: "bg-brand-100 text-brand-800",
   MANAGER: "bg-violet-100 text-violet-800",
-  ANALYST: "bg-emerald-100 text-emerald-800",
+  BRAND_MANAGER: "bg-emerald-100 text-emerald-800",
   SUPERVISOR: "bg-amber-100 text-amber-800",
   FIELD_AGENT: "bg-slate-100 text-slate-700",
 };
@@ -64,7 +64,7 @@ export default function AdminPage() {
         title="Administration"
         subtitle="Gestion des utilisateurs, rôles et permissions."
         action={
-          <button className="btn-primary" onClick={() => setOpen((o) => !o)}>
+          <button className="btn-primary" onClick={() => setOpen((o) => !o)} title="Ajouter un nouvel utilisateur à l'organisation">
             <UserPlus size={16} /> Nouvel utilisateur
           </button>
         }
@@ -75,26 +75,34 @@ export default function AdminPage() {
           <h3 className="font-semibold text-slate-800">Créer un utilisateur</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="label">Nom complet *</label>
+              <label htmlFor="user-name" className="label">Nom complet *</label>
               <input
+                id="user-name"
                 className="input"
+                placeholder="Ex: Cédric Touré"
+                title="Saisir le nom complet du nouvel collaborateur"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </div>
             <div>
-              <label className="label">Email *</label>
+              <label htmlFor="user-email" className="label">Email *</label>
               <input
+                id="user-email"
                 className="input"
                 type="email"
+                placeholder="Ex: nom@frieslandcampina.com"
+                title="Saisir l'adresse mail officielle"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
             </div>
             <div>
-              <label className="label">Rôle</label>
+              <label htmlFor="user-role-select" className="label">Rôle</label>
               <select
+                id="user-role-select"
                 className="input"
+                title="Sélectionner le profil d'autorisation"
                 value={form.role}
                 onChange={(e) =>
                   setForm({ ...form, role: e.target.value as Role })
@@ -108,9 +116,11 @@ export default function AdminPage() {
               </select>
             </div>
             <div>
-              <label className="label">Région</label>
+              <label htmlFor="user-region-select" className="label">Région</label>
               <select
+                id="user-region-select"
                 className="input"
+                title="Sélectionner la région d'affectation terrain"
                 value={form.region}
                 onChange={(e) => setForm({ ...form, region: e.target.value })}
               >
@@ -122,10 +132,10 @@ export default function AdminPage() {
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex justify-end gap-3">
-            <button className="btn-secondary" onClick={() => setOpen(false)}>
+            <button className="btn-secondary" onClick={() => setOpen(false)} title="Abandonner la création">
               Annuler
             </button>
-            <button className="btn-primary" onClick={addUser}>
+            <button className="btn-primary" onClick={addUser} title="Confirmer l'ajout de l'utilisateur">
               Créer
             </button>
           </div>
@@ -159,6 +169,8 @@ export default function AdminPage() {
                   <td className="px-4 py-3">
                     <select
                       value={u.role}
+                      title={`Modifier le rôle de ${u.name}`}
+                      aria-label={`Rôle actuel de ${u.name}`}
                       onChange={(e) => changeRole(u, e.target.value as Role)}
                       className={cn(
                         "rounded-full border-0 px-2.5 py-1 text-xs font-medium",
@@ -181,6 +193,7 @@ export default function AdminPage() {
                   <td className="px-4 py-3">
                     <button
                       onClick={() => toggleActive(u)}
+                      title={`Basculer le statut d'activation pour ${u.name}`}
                       className={cn(
                         "badge",
                         u.active
@@ -195,7 +208,7 @@ export default function AdminPage() {
                     <div className="flex justify-end gap-1">
                       <button
                         className="rounded p-1.5 text-slate-400 hover:bg-slate-100"
-                        title="Réinitialiser le mot de passe"
+                        title={`Réinitialiser le mot de passe pour ${u.name}`}
                         onClick={() =>
                           alert(
                             `Un lien de réinitialisation serait envoyé à ${u.email}.`,
@@ -206,6 +219,7 @@ export default function AdminPage() {
                       </button>
                       <button
                         className="rounded p-1.5 text-red-400 hover:bg-red-50"
+                        title={`Supprimer définitivement l'utilisateur ${u.name}`}
                         onClick={() => remove(u.id)}
                       >
                         <Trash2 size={15} />
@@ -232,7 +246,7 @@ export default function AdminPage() {
               <p className="text-xs text-slate-500">
                 {r === "ADMIN" && "Accès total : administration, études, dashboards, collecte."}
                 {r === "MANAGER" && "Pilotage : dashboards, études, validation, analytics."}
-                {r === "ANALYST" && "Conception d'études, dashboards et insights."}
+                {r === "BRAND_MANAGER" && "Conception d'études, dashboards et insights."}
                 {r === "SUPERVISOR" && "Validation terrain, collecte, dashboards."}
                 {r === "FIELD_AGENT" && "Collecte terrain, audit prix, merchandising."}
               </p>

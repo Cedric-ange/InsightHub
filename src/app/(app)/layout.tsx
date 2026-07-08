@@ -7,45 +7,36 @@ import { Topbar } from "@/components/layout/Topbar";
 import { canAccess, landingPath, useAuth } from "@/lib/auth";
 import { NAV_ITEMS } from "@/components/layout/nav";
 import { cn } from "@/lib/utils";
-import { useSync } from "@/lib/sync"; // ⚡ Import du moteur de synchronisation
+import { useSync } from "@/lib/sync";
+import { useSidebarStore } from "@/lib/sidebarStore"; // ⚡ Import du store
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const user = useAuth((s) => s.user);
+  const isCollapsed = useSidebarStore((s) => s.isCollapsed); // ⚡ Écoute de l'état réduit
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ready, setReady] = useState(false);
 
-  // Récupération des actions du store de synchronisation
   const { flush, pullStudiesFromCloud, refreshPending } = useSync();
 
-  // 🔄 BOUCLE DE SYNCHRONISATION AUTOMATIQUE & PÉRIODIQUE (Toutes les 30 secondes)
   useEffect(() => {
     if (!user) return;
-
-    // 1. Chargement et vérification initiale immédiate
     refreshPending();
     if (user.role !== "FIELD_AGENT") {
       pullStudiesFromCloud();
     }
 
-    // 2. Initialisation de la routine d'arrière-plan avec Supabase
     const interval = setInterval(async () => {
-      console.log("🔄 Synchronisation périodique automatique avec Supabase...");
-      
-      // Pousse les données collectées localement si nécessaire
       await flush(user.role);
-      
-      // Si c'est un profil décisionnaire, on actualise le catalogue de formulaires
       if (user.role !== "FIELD_AGENT") {
         await pullStudiesFromCloud();
       }
-    }, 30000); // 30000 ms = 30 secondes
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [user, flush, pullStudiesFromCloud, refreshPending]);
 
-  // Auth guard + per-area role guard (client-side; auth is persisted locally).
   useEffect(() => {
     if (!user) {
       router.replace("/login");
@@ -72,10 +63,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
+    <div 
+      className={cn(
+        "min-h-screen transition-[grid-template-columns] duration-300 ease-in-out lg:grid",
+        isCollapsed ? "lg:grid-cols-[76px_1fr]" : "lg:grid-cols-[260px_1fr]" // ⚡ Ajustement dynamique de l'espace
+      )}
+    >
       {/* Desktop sidebar */}
       <aside className="hidden lg:block">
-        <div className="fixed inset-y-0 w-[260px]">
+        <div className={cn("fixed inset-y-0 transition-[width] duration-300 ease-in-out", isCollapsed ? "w-[76px]" : "w-[260px]")}>
           <Sidebar />
         </div>
       </aside>
@@ -83,20 +79,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setMobileOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-y-0 left-0 w-[260px]">
             <Sidebar onNavigate={() => setMobileOpen(false)} />
           </div>
         </div>
       )}
 
-      <div className={cn("flex min-h-screen flex-col")}>
+      <div className="flex min-h-screen flex-col overflow-x-hidden">
         <Topbar onMenu={() => setMobileOpen(true)} />
         <main className="flex-1 p-4 sm:p-6">
-          <div className="mx-auto max-w-6xl">{children}</div>
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
     </div>
