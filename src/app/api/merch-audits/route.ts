@@ -3,34 +3,35 @@ import postgres from "postgres";
 
 export const dynamic = "force-dynamic";
 
-// Connexion Directe (Port 5432)
-const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
-
 export async function GET() {
   try {
-    const data = await sql`SELECT * FROM price_audits ORDER BY created_at DESC`;
+    // ⚡ Initialisation dynamique
+    const sql = postgres(process.env.DATABASE_URL!, { ssl: "allow" });
+    
+    const data = await sql`SELECT * FROM merch_audits ORDER BY created_at DESC`;
 
-    const camelCaseData = data.map((p) => ({
-      id: p.id,
-      outlet: p.outlet,
-      channel: p.channel,
-      brand: p.brand,
-      isOwnBrand: p.is_own_brand,
-      product: p.product,
-      price: p.price,
-      promo: p.promo,
-      available: p.available,
-      facings: p.facings,
-      region: p.region,
-      geo: p.geo,
-      agentId: p.agent_id,
-      agentName: p.agent_name,
-      createdAt: p.created_at,
+    const camelCaseData = data.map((m) => ({
+      id: m.id,
+      outlet: m.outlet,
+      channel: m.channel,
+      brand: m.brand,
+      isOwnBrand: m.is_own_brand,
+      facings: m.facings,
+      shelfLengthCm: m.shelf_length_cm,
+      shelfPosition: m.shelf_position,
+      outOfStock: m.out_of_stock,
+      plvPresent: m.plv_present,
+      activationPresent: m.activation_present,
+      region: m.region,
+      geo: m.geo,
+      agentId: m.agent_id,
+      agentName: m.agent_name,
+      createdAt: m.created_at,
     }));
 
     return NextResponse.json({ success: true, data: camelCaseData });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erreur SQL Direct PriceAudits";
+    const msg = error instanceof Error ? error.message : "Erreur SQL Direct MerchAudits";
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

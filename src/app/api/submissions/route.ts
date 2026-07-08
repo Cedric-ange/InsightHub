@@ -3,11 +3,11 @@ import postgres from "postgres";
 
 export const dynamic = "force-dynamic";
 
-// Connexion Directe (Port 5432)
-const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
-
 export async function GET() {
   try {
+    // ⚡ On initialise le client SQL DIRECTEMENT dans la fonction pour forcer la lecture de la variable Vercel
+    const sql = postgres(process.env.DATABASE_URL!, { ssl: "allow" });
+    
     const data = await sql`SELECT * FROM submissions ORDER BY created_at DESC`;
 
     const camelCaseData = data.map((s) => ({
