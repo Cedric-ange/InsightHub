@@ -29,8 +29,8 @@ export async function GET() {
     const now = Date.now();
     const day = 86_400_000;
 
-    // 👥 1. Comptes Utilisateurs FrieslandCampina uniques & sécurisés
-    const seedUsers = [
+    // 👥 1. Comptes Utilisateurs - Typage propre accepté par ESLint
+    const seedUsers: Record<string, unknown>[] = [
       { id: "agent_cedric_01", name: "Cédric Touré", email: "cedric.toure@frieslandcampina.com", role: "admin", password: "FC_Admin_Abidjan2026!" },
       { id: "agent_patrick_02", name: "Patrick Epée", email: "patrick.epee@frieslandcampina.com", role: "manager", password: "FC_Manager_Epee2026*" },
       { id: "agent_dian_03", name: "Dian Delaure", email: "dian.delaure@frieslandcampina.com", role: "analyst", password: "FC_Analyst_Delaure!" },
@@ -38,8 +38,8 @@ export async function GET() {
       { id: "agent_terrain_02", name: "Test User", email: "user.test@frieslandcampina.com", role: "field", password: "demo" }
     ];
 
-    // 📋 2. Catalogue Complet des Questionnaires Métiers (FrieslandCampina)
-    const guideRetail = {
+    // 📋 2. Catalogue de Questionnaires Métiers - Typage Record
+    const guideRetail: Record<string, unknown> = {
       id: "guide_retail",
       title: "Consumer Connect — Grande distribution",
       description: "Guide d'entretien chef de rayon / manager (Auchan, Prosuma, Carrefour). Référencement, promotions, ruptures et réaction prix.",
@@ -49,14 +49,14 @@ export async function GET() {
       updatedAt: now - day,
       questions: [
         { id: "gr_refs", type: "long_text", label: "Quelles sont les références les plus vendues en lait en poudre, évaporé et UHT ?", required: true, sixp: "PRODUCT" },
-        { id: "gr_nego", type: "single_choice", label: "Who negotiates referencing and gondola heads?", required: true, options: ["Le siège", "Le magasin", "Les deux"], sixp: "PLACE" },
-        { id: "gr_promo", type: "long_text", label: "Quelles marques poussent le plus de promotions (2-for-1, prix barré) et à quelle fréquence ?", required: true, sixp: "PROMOTION" },
+        { id: "gr_nego", type: "single_choice", label: "Qui négocie le référencement et les têtes de gondole ?", required: true, options: ["Le siège", "Le magasin", "Les deux"], sixp: "PLACE" },
+        { id: "gr_promo", type: "long_text", label: "Quelles marques pushes le plus de promotions (2-for-1, prix barré) et à quelle fréquence ?", required: true, sixp: "PROMOTION" },
         { id: "gr_rupture", type: "boolean", label: "Y a-t-il des ruptures de stock fréquentes ?", required: true, sixp: "PLACE" },
         { id: "gr_price_reaction", type: "long_text", label: "Comment les clients réagissent-ils à un changement de prix sur le lait ?", required: true, sixp: "PRICE" }
       ]
     };
 
-    const guideTraditional = {
+    const guideTraditional: Record<string, unknown> = {
       id: "guide_traditional",
       title: "Consumer Connect — Marché traditionnel / boutique",
       description: "Guide d'entretien commerçant / grossiste de quartier. Formats, approvisionnement, réassort et appui commercial.",
@@ -72,7 +72,7 @@ export async function GET() {
       ]
     };
 
-    const guideDistributor = {
+    const guideDistributor: Record<string, unknown> = {
       id: "guide_distributor",
       title: "Consumer Connect — Distributeur / importateur",
       description: "Guide d'entretien distributeur / importateur. Volumes, saisonnalité, marges par échelon et barrières logistiques.",
@@ -87,7 +87,7 @@ export async function GET() {
       ]
     };
 
-    const guideConsumer = {
+    const guideConsumer: Record<string, unknown> = {
       id: "guide_consumer",
       title: "Consumer Connect — Consommateurs",
       description: "Guide d'entretien consommateur en sortie de marché / point de vente. Critères de choix, usage, confiance de marque et budget.",
@@ -103,7 +103,7 @@ export async function GET() {
       ]
     };
 
-    const tasteStudy = {
+    const tasteStudy: Record<string, unknown> = {
       id: "study_taste",
       title: "Dégustation nouvelle marque Biscuit",
       description: "Test de dégustation d'un nouveau biscuit avant lancement. Évaluation goût, texture, emballage et intention d'achat.",
@@ -118,10 +118,10 @@ export async function GET() {
       ]
     };
 
-    const STUDIES = [guideRetail, guideTraditional, guideDistributor, guideConsumer, tasteStudy];
+    const STUDIES: Record<string, unknown>[] = [guideRetail, guideTraditional, guideDistributor, guideConsumer, tasteStudy];
 
-    // 📊 3. Séquence de Génération des Soumissions (40 lignes)
-    const seedSubmissions = [];
+    // 📊 3. Séquence Soumissions
+    const seedSubmissions: Record<string, unknown>[] = [];
     const likeVals = ["Très satisfait", "Satisfait", "Moyen", "Insatisfait"];
     for (let i = 0; i < 40; i++) {
       const started = now - (i % 14) * day - i * 3600_000;
@@ -147,8 +147,8 @@ export async function GET() {
       });
     }
 
-    // 💵 4. Séquence Audits des Prix Bonnet Rouge vs Concurrence (30 lignes)
-    const seedPriceAudits = [];
+    // 💵 4. Séquence Audits des Prix
+    const seedPriceAudits: Record<string, unknown>[] = [];
     const products = ["Lait Bonnet Rouge 160g", "Lait Poudre Bonnet Rouge 900g", "Format Sachet Bonnet Rouge"];
     for (let i = 0; i < 30; i++) {
       const own = i % 2 === 0;
@@ -171,8 +171,8 @@ export async function GET() {
       });
     }
 
-    // 📦 5. Séquence Audits Merchandising (24 lignes)
-    const seedMerchAudits = [];
+    // 📦 5. Séquence Audits Merchandising
+    const seedMerchAudits: Record<string, unknown>[] = [];
     const positions = ["eye", "top", "middle", "bottom"];
     for (let i = 0; i < 24; i++) {
       const own = i % 2 === 0;
@@ -196,7 +196,7 @@ export async function GET() {
       });
     }
 
-    // 🔥 EXECUTION DE LA PURGE ET RE-REMPLISSAGE DANS SUPABASE CLOUD
+    // Purge et insertion
     await supabase.from("users").delete().neq("id", "keep_all");
     await supabase.from("studies").delete().neq("id", "keep_all");
     await supabase.from("submissions").delete().neq("id", "keep_all");
@@ -211,7 +211,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: "Toutes les études Consumer Connect et audits laitiers FrieslandCampina ont été injectés !",
+      message: "Toutes les études Consumer Connect FrieslandCampina ont été injectées sans aucun warning any !",
       stats: {
         users: seedUsers.length,
         studies: STUDIES.length,
