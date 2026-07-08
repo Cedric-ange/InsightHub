@@ -1,68 +1,118 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Users, MapPin, Tags, LayoutGrid, Smile, Gauge, ClipboardList, BarChart3, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { getDB } from "@/lib/db";
 import { computeKPIs, interviewsTrend, priceByBrand, shelfShareByBrand } from "@/lib/analytics";
 import { PageHeader, StatCard, Card } from "@/components/ui";
-import { formatFCFA } from "@/lib/utils";
+import { formatFCFA, cn } from "@/lib/utils";
 import { GpsMap } from "@/components/GpsMap";
-import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
+import type { Submission, PriceAudit, MerchAudit } from "@/lib/types"; // ⚡ Import des vrais types applicatifs
 
 const PIE = ["#D32F2F", "#009639", "#FBC02D", "#0ea5a4", "#8b5cf6"];
 
 export default function DashboardPage() {
   const [selectedModule, setSelectedModule] = useState<string>("all");
-  const [isSubCollapsed, setIsSubCollapsed] = useState<boolean>(false); // ⚡ Rétraction locale
+  const [isSubCollapsed, setIsSubCollapsed] = useState<boolean>(false);
+  const user = useAuth((s) => s.user);
+  
+  // ⚡ Typage strict de l'état Cloud avec tes interfaces réelles au lieu de any[]
+  const [cloudData, setCloudData] = useState<{ submissions: Submission[]; price: PriceAudit[]; merch: MerchAudit[] } | null>(null);
 
-  const data = useLiveQuery(async () => {
+  // 1. Stratégie Locale (Uniquement pour le compte FIELD_AGENT / Test)
+  const localData = useLiveQuery(async () => {
+    if (user?.role !== "FIELD_AGENT") return null;
     const db = getDB();
     const [submissions, price, merch] = await Promise.all([
       db.submissions.toArray(),
       db.priceAudits.toArray(),
       db.merchAudits.toArray(),
     ]);
+    return { submissions, price, merch };
+  }, [user]);
 
-    const cleanedPrice = price.map(p => ({
-      ...p,
-      brand: p.brand === "Notre marque" ? "Bonnet Rouge" : p.brand
-    }));
+  // 2. Stratégie Cloud Supabase (Pour l'administrateur et les profils managériaux)
+  useEffect(() => {
+    if (!user || user.role === "FIELD_AGENT") return;
 
-    const cleanedMerch = merch.map(m => ({
-      ...m,
-      brand: m.brand === "Notre marque" ? "Bonnet Rouge" : m.brand
-    }));
+    async function fetchSupabaseData() {
+      try {
+        const [resSubs, resPrice, resMerch] = await Promise.all([
+          fetch("/api/submissions"),
+          fetch("/api/price-audits"),
+          fetch("/api/merch-audits"),
+        ]);
 
-    return { submissions, price: cleanedPrice, merch: cleanedMerch };
-  }, []);
+        const [subsJson, priceJson, merchJson] = await Promise.all([
+          resSubs.json(),
+          resPrice.json(),
+          resMerch.json(),
+        ]);
 
-  if (!data) {
-    return <p className="text-slate-400">Chargement des analyses de performance...</p>;
+        setCloudData({
+          submissions: subsJson.data || [],
+          price: priceJson.data || [],
+          merch: merchJson.data || [],
+        });
+      } catch (err) {
+        console.error("Erreur lors du chargement des tables Supabase :", err);
+      }
+    }
+
+    fetchSupabaseData();
+  }, [user]);
+
+  // Sélection de la source d'approvisionnement en données
+  const activeData = user?.role === "FIELD_AGENT" ? localData : cloudData;
+
+  if (!activeData) {
+    return <p className="text-slate-400 p-6">Chargement des indicateurs analytiques depuis Supabase...</p>;
   }
 
+  // ⚡ Remplacement des signatures (p: any) et (m: any) par leurs vrais types structurels
+  const cleanedPrice = activeData.price.map((p: PriceAudit) => ({
+    ...p,
+    brand: p.brand === "Notre marque" ? "Bonnet Rouge" : p.brand
+  }));
+
+  const cleanedMerch = activeData.merch.map((m: MerchAudit) => ({
+    ...m,
+    brand: m.brand === "Notre marque" ? "Bonnet Rouge" : m.brand
+  }));
+
+  const data = { submissions: activeData.submissions, price: cleanedPrice, merch: cleanedMerch };
+
+  // Filtrage selon le canal ou questionnaire sélectionné dans le volet secondaire
   const filteredPrice = selectedModule === "all" || selectedModule === "price" ? data.price : [];
   const filteredMerch = selectedModule === "all" || selectedModule === "merch" ? data.merch : [];
+  
+  // ⚡ Typage strict sur les filtres de soumissions
   const filteredSubmissions = selectedModule === "all" 
     ? data.submissions 
     : selectedModule === "facebook" 
-    ? data.submissions.filter(s => s.studyId === "guide_consumer")
-    : data.submissions.filter(s => s.studyId=== selectedModule);
+    ? data.submissions.filter((s: Submission) => s.studyId === "guide_consumer")
+    : data.submissions.filter((s: Submission) => s.studyId === selectedModule);
 
+  // Extraction mathématique des insights
   const kpis = computeKPIs(filteredSubmissions, filteredPrice, filteredMerch);
   const trend = interviewsTrend(filteredSubmissions);
   const brands = priceByBrand(filteredPrice);
   const shelf = shelfShareByBrand(filteredMerch);
-  const geoPoints = filteredSubmissions.filter((s) => s.geo).map((s) => s.geo!).slice(0, 100);
+  
+  // ⚡ Typage strict (s: Submission) sur le mappage de coordonnées GPS
+  const geoPoints = filteredSubmissions.filter((s: Submission) => s.geo).map((s: Submission) => s.geo!).slice(0, 100);
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] gap-4 bg-slate-50 transition-all duration-300">
       
-      {/* 🧭 SIDEBAR SECONDAIRE MODIFIÉE */}
+      {/* 🧭 SIDEBAR SECONDAIRE */}
       <div 
         className={cn(
-          "shrink-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm flex flex-col justify-between transition-[width] duration-300 relative",
+          "shrink-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm flex flex-col justify-between transition-[width] duration-300 ease-in-out",
+          "sticky top-16 h-[calc(100vh-5.5rem)] overflow-y-auto",
           isSubCollapsed ? "w-14" : "w-64"
         )}
       >
@@ -150,16 +200,16 @@ export default function DashboardPage() {
           </nav>
         </div>
 
-        {/* Bouton de bascule en bas de la sidebar secondaire */}
         <button
           onClick={() => setIsSubCollapsed(!isSubCollapsed)}
           className="flex h-9 w-full items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors mt-auto"
+          title={isSubCollapsed ? "Déplier le sous-menu" : "Replier le sous-menu"}
         >
           {isSubCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
-      {/* 📊 PANNEAU PRINCIPAL ANALYTIQUE */}
+      {/* 📊 PANNEAU ANALYTIQUE CENTRAL */}
       <div className="flex-1 space-y-6 overflow-hidden">
         <PageHeader
           title={
@@ -171,7 +221,7 @@ export default function DashboardPage() {
           subtitle="Suivi analytique en temps réel indexé sur vos objectifs de vente."
         />
 
-        {/* Cartes de KPIs */}
+        {/* Grille de KPI Cards */}
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
           <StatCard label="Interviews" value={kpis.interviews} icon={<Users size={18} />} />
           <StatCard label="Régions" value={kpis.regionsCovered} icon={<MapPin size={18} />} tone="green" />
@@ -181,7 +231,7 @@ export default function DashboardPage() {
           <StatCard label="Satisfaction" value={`${Math.round(kpis.satisfaction * 100)}%`} icon={<Smile size={18} />} tone="green" />
         </div>
 
-        {/* Section Graphiques */}
+        {/* Graphiques Décisionnels */}
         <div className="grid gap-4 lg:grid-cols-2">
           {trend.length > 0 && (
             <Card>
@@ -221,7 +271,8 @@ export default function DashboardPage() {
             <Card>
               <h3 className="mb-4 text-sm font-semibold text-slate-700">Part de Linéaire Réelle</h3>
               <div className="space-y-3">
-                {shelf.map((s, i) => (
+                {/* ⚡ Correction de la signature du map (s: any) par le type anonyme généré par l'analytics */}
+                {shelf.map((s: { brand: string; share: number }, i: number) => (
                   <div key={s.brand}>
                     <div className="mb-1 flex justify-between text-xs text-slate-600">
                       <span>{s.brand}</span>
