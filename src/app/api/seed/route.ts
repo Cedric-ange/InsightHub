@@ -34,35 +34,35 @@ export async function POST() {
       { 
         id: "agent_cedric_01", 
         name: "Cédric Touré", 
-        email: "cedric.toure@insighthub.ci", 
+        email: "cedric.toure@frieslandcampina.com", 
         role: "Administrateur",
         password: "FC_Admin_Abidjan2026!"
       },
       { 
         id: "agent_patrick_02", 
         name: "Patrick Epée", 
-        email: "patrick.epee@insighthub.ci", 
+        email: "patrick.epee@frieslandcampina.com", 
         role: "Manager",
         password: "FC_Manager_Epee2026*"
       },
       { 
         id: "agent_dian_03", 
         name: "Dian Delaure", 
-        email: "dian.delaure@insighthub.ci", 
+        email: "dian.delaure@frieslandcampina.com", 
         role: "Analyste",
         password: "FC_Analyst_Delaure!"
       },
       { 
         id: "agent_marie_04", 
         name: "Marie Jeanne", 
-        email: "marie.jeanne@insighthub.ci", 
+        email: "marie.jeanne@frieslandcampina.com", 
         role: "Superviseur Terrain",
         password: "FC_Super_Marie2026"
       },
       { 
         id: "agent_dogo_05", 
         name: "Dogo Jean-Marc", 
-        email: "jean-marc.dogo@insighthub.ci", 
+        email: "jean-marc.dogo@frieslandcampina.com", 
         role: "Enquêteur",
         password: "FC_Field_Dogo2026"
       }

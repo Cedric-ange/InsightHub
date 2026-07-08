@@ -8,11 +8,7 @@ import { LogIn, ChevronRight, Loader2 } from "lucide-react";
 
 // On duplique proprement la liste avec les vrais emails et mots de passe du Seed pour les boutons
 const REAL_DEVICES_ACCOUNTS = [
-  { name: "Cédric Touré", email: "cedric.toure@insighthub.ci", password: "FC_Admin_Abidjan2026!", role: "admin" },
-  { name: "Patrick Epée", email: "patrick.epee@insighthub.ci", password: "FC_Manager_Epee2026*", role: "manager" },
-  { name: "Dian Delaure", email: "dian.delaure@insighthub.ci", password: "FC_Analyst_Delaure!", role: "analyst" },
-  { name: "Marie Jeanne", email: "marie.jeanne@insighthub.ci", password: "FC_Super_Marie2026", role: "supervisor" },
-  { name: "Dogo Jean-Marc", email: "jean-marc.dogo@insighthub.ci", password: "FC_Field_Dogo2026", role: "field" }
+  { name: "Test User", email: "user.test@frieslandcampina.com", password: "demo", role: "field" }
 ];
 
 export default function LoginPage() {
