@@ -6,14 +6,14 @@ import { landingPath, useAuth } from "@/lib/auth";
 import { ROLE_LABELS } from "@/lib/types";
 import { LogIn, ChevronRight, Loader2 } from "lucide-react";
 
-// On duplique proprement la liste avec les vrais emails et mots de passe du Seed pour les boutons
+// Compte de simulation terrain aligné sur la base de données
 const REAL_DEVICES_ACCOUNTS = [
   { name: "Test User", email: "user.test@frieslandcampina.com", password: "demo", role: "field" }
 ];
 
 export default function LoginPage() {
   const router = useRouter();
-  const setSession = useAuth((s) => s.loginAs); // Utilise le store Zustand pour stocker l'utilisateur connecté
+  const setSession = useAuth((s) => s.loginAs);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -25,9 +25,13 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
+      // ⚡ CONTOURNEMENT SERVICE WORKER : Ajout d'un timestamp unique pour forcer le passage réseau direct
+      const response = await fetch(`/api/login?_t=${Date.now()}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache, no-store, must-revalidate"
+        },
         body: JSON.stringify({ email: targetEmail, password: targetPass }),
       });
 
@@ -37,7 +41,7 @@ export default function LoginPage() {
         throw new Error(data.error || "Identifiants invalides");
       }
 
-      // Si le backend valide, on synchronise l'état global frontend (Zustand)
+      // Synchronisation de l'état de session global (Zustand)
       setSession(data.user);
       router.replace(landingPath(data.user.role));
     } catch (err: unknown) {
@@ -55,7 +59,7 @@ export default function LoginPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      {/* Brand panel */}
+      {/* Panel de Gauche - Identité visuelle */}
       <div className="hidden flex-col justify-between bg-brand-950 p-10 text-white lg:flex">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-lg font-bold">
@@ -68,7 +72,7 @@ export default function LoginPage() {
         </div>
         <div>
           <h2 className="text-3xl font-bold leading-tight">
-            Votre Outil de Fiel Intelligence
+            Votre Outil de Field Intelligence
           </h2>
           <p className="mt-4 max-w-md text-brand-200">
             Collecte terrain digitale offline, audit prix, merchandising et
@@ -86,7 +90,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Login form */}
+      {/* Panel de Droite - Formulaire de Connexion */}
       <div className="flex items-center justify-center bg-white p-6">
         <div className="w-full max-w-sm">
           <div className="mb-6 lg:hidden">
@@ -128,13 +132,20 @@ export default function LoginPage() {
                 autoComplete="current-password"
               />
             </div>
-            {error && <p className="text-sm text-red-600">{error}</p>}
-            <button type="submit" disabled={loading} className="btn-primary w-full flex justify-center items-center gap-2">
+            
+            {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+            
+            <button 
+              type="submit" 
+              disabled={loading} 
+              className="btn-primary w-full flex justify-center items-center gap-2"
+            >
               {loading ? <Loader2 size={16} className="animate-spin" /> : <LogIn size={16} />}
               Se connecter
             </button>
           </form>
 
+          {/* Section d'accès rapide pour simulation en recette */}
           <div className="mt-8">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
               Simulation Session Réelle (RH)
@@ -163,7 +174,7 @@ export default function LoginPage() {
               ))}
             </div>
             <p className="mt-3 text-xs text-slate-400">
-              Chaque clic interroge dynamiquement la table <code>users</code> de Supabase Cloud avec son mot de passe unique.
+              Chaque clic interroge dynamiquement la table <code>users</code> de Supabase Cloud en forçant le contournement des caches locaux.
             </p>
           </div>
         </div>
