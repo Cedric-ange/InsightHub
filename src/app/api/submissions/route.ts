@@ -3,18 +3,13 @@ import postgres from "postgres";
 
 export const dynamic = "force-dynamic";
 
-// Initialisation du pooler direct
+// Connexion Directe (Port 5432)
 const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
 
 export async function GET() {
   try {
-    // Requête SQL directe à la base de données de production
-    const data = await sql`
-      SELECT * FROM submissions 
-      ORDER BY created_at DESC
-    `;
+    const data = await sql`SELECT * FROM submissions ORDER BY created_at DESC`;
 
-    // Le remappage reste identique pour ton frontend
     const camelCaseData = data.map((s) => ({
       id: s.id,
       studyId: s.study_id,
@@ -32,7 +27,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, data: camelCaseData });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erreur de connexion SQL direct";
+    const msg = error instanceof Error ? error.message : "Erreur SQL Direct Submissions";
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
