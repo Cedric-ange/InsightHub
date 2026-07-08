@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-    export async function GET() {
-        try {
-    // Le serveur va tester la clé publique OU la clé système de Vercel
+export async function POST() {
+  try {
+    // Force la lecture des variables avec ou sans préfixe système Vercel
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
     if (!url || !key) {
       return NextResponse.json(
-        { error: "Variables Supabase manquantes côté serveur." },
+        { error: "Variables Supabase manquantes sur la route de synchronisation." },
         { status: 500 }
       );
     }
@@ -17,6 +17,8 @@ import { createClient } from "@supabase/supabase-js";
     const supabase = createClient(url, key, {
       auth: { persistSession: false },
     });
+
+    // ... reste de ton code existant (la boucle qui reçoit les price_audits, merch_audits, etc.)
 
     const now = Date.now();
     const day = 86_400_000;
