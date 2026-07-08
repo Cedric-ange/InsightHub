@@ -3,15 +3,16 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: Request) {
   try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Remplace la lecture des variables par cette double vérification :
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
-    if (!url || !key) {
-      return NextResponse.json(
-        { error: "Variables Supabase manquantes côté serveur." },
-        { status: 500 }
-      );
-    }
+if (!url || !key) {
+  return NextResponse.json(
+    { error: "Variables Supabase manquantes pour la synchronisation des soumissions." },
+    { status: 500 }
+  );
+}
 
     const supabase = createClient(url, key, {
       auth: { persistSession: false },
