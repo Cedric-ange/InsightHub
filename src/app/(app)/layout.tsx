@@ -8,20 +8,45 @@ import { canAccess, landingPath, useAuth } from "@/lib/auth";
 import { NAV_ITEMS } from "@/components/layout/nav";
 import { cn } from "@/lib/utils";
 import { useSync } from "@/lib/sync";
-import { useSidebarStore } from "@/lib/sidebarStore"; // ⚡ Import du store
+import { useSidebarStore } from "@/lib/sidebarStore";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const user = useAuth((s) => s.user);
-  const isCollapsed = useSidebarStore((s) => s.isCollapsed); // ⚡ Écoute de l'état réduit
+  const isCollapsed = useSidebarStore((s) => s.isCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [hydrated, setHydrated] = useState(false); // ⚡ Attendre le localStorage
 
   const { flush, pullStudiesFromCloud, refreshPending } = useSync();
 
+// Éviter le piège de la déconnexion instantanée au rafraîchissement
   useEffect(() => {
-    if (!user) return;
+    // On valide simplement que le composant est monté côté client
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return; // Ne rien faire tant que Zustand n'a pas lu le localStorage
+
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+
+    const nav = NAV_ITEMS.find(
+      (n) => pathname === n.href || pathname.startsWith(n.href + "/"),
+    );
+    if (nav && !canAccess(user.role, nav.area)) {
+      router.replace(landingPath(user.role));
+      return;
+    }
+    setReady(true);
+  }, [user, pathname, router, hydrated]);
+
+  useEffect(() => {
+    if (!user || !ready) return;
     refreshPending();
     if (user.role !== "FIELD_AGENT") {
       pullStudiesFromCloud();
@@ -35,29 +60,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [user, flush, pullStudiesFromCloud, refreshPending]);
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/login");
-      return;
-    }
-    const nav = NAV_ITEMS.find(
-      (n) => pathname === n.href || pathname.startsWith(n.href + "/"),
-    );
-    if (nav && !canAccess(user.role, nav.area)) {
-      router.replace(landingPath(user.role));
-      return;
-    }
-    setReady(true);
-  }, [user, pathname, router]);
+  }, [user, ready, flush, pullStudiesFromCloud, refreshPending]);
 
   useEffect(() => setMobileOpen(false), [pathname]);
 
-  if (!user || !ready) {
+  // Écran d'attente pendant la lecture du localStorage pour empêcher le saut vers /login
+  if (!hydrated || !user || !ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-400">
-        Chargement…
+      <div className="flex min-h-screen items-center justify-center text-slate-400 font-medium">
+        Vérification de la session sécurisée…
       </div>
     );
   }
@@ -66,17 +77,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div 
       className={cn(
         "min-h-screen transition-[grid-template-columns] duration-300 ease-in-out lg:grid",
-        isCollapsed ? "lg:grid-cols-[76px_1fr]" : "lg:grid-cols-[260px_1fr]" // ⚡ Ajustement dynamique de l'espace
+        isCollapsed ? "lg:grid-cols-[76px_1fr]" : "lg:grid-cols-[260px_1fr]"
       )}
     >
-      {/* Desktop sidebar */}
       <aside className="hidden lg:block">
         <div className={cn("fixed inset-y-0 transition-[width] duration-300 ease-in-out", isCollapsed ? "w-[76px]" : "w-[260px]")}>
           <Sidebar />
         </div>
       </aside>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
