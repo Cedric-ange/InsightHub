@@ -1,45 +1,57 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import postgres from "postgres";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email } = await request.json();
 
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-
-    if (!url || !key) {
-      return NextResponse.json({ error: "Configuration serveur Supabase manquante." }, { status: 500 });
+    if (!email) {
+      return NextResponse.json({ success: false, error: "Email requis" }, { status: 400 });
     }
 
-    const supabase = createClient(url, key, { auth: { persistSession: false } });
+    // ⚡ Connexion Directe en un clin d'œil avec la variable DATABASE_URL
+    const sql = postgres(process.env.DATABASE_URL!, { ssl: "allow" });
 
-    const { data: user, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", email)
-      .single();
+    // On cherche l'utilisateur dans la vraie table 'users' de Supabase
+    const users = await sql`
+      SELECT id, name, email, role, region, active 
+      FROM users 
+      WHERE LOWER(email) = ${email.trim().toLowerCase()} 
+      LIMIT 1
+    `;
 
-    if (error || !user) {
-      return NextResponse.json({ error: "Identifiants invalides ou utilisateur introuvable." }, { status: 401 });
+    if (users.length === 0) {
+      return NextResponse.json(
+        { success: false, error: "Utilisateur inconnu dans la base Supabase Cloud." },
+        { status: 401 }
+      );
     }
 
-    if (user.password !== password) {
-      return NextResponse.json({ error: "Identifiants invalides." }, { status: 401 });
+    const user = users[0];
+
+    if (!user.active) {
+      return NextResponse.json(
+        { success: false, error: "Ce compte est actuellement désactivé." },
+        { status: 403 }
+      );
     }
 
-// Retourne le profil utilisateur s'il est validé en forçant le rôle en MAJUSCULES
+    // Connexion réussie ! On renvoie le profil utilisateur complet au store auth frontend
     return NextResponse.json({
       success: true,
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role.toUpperCase() // ⚡ ICI : Aligne le format pour Zustand
-      }
+        role: user.role,
+        region: user.region,
+      },
     });
 
-  } catch {
-    return NextResponse.json({ error: "Erreur interne du serveur." }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Erreur serveur lors de l'authentification";
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
