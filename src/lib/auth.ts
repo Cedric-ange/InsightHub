@@ -98,12 +98,12 @@ export const useAuth = create<AuthState>()(
 // Mappage strict des rôles applicatifs
 export const ROLE_ACCESS: Record<string, Role[]> = {
   dashboard: ["ADMIN", "MANAGER", "BRAND_MANAGER", "SUPERVISOR"],
-  studies: ["ADMIN", "MANAGER", "BRAND_MANAGER"],
-  collect: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
-  "audit-prix": ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
-  merchandising: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
+  studies: ["ADMIN", "MANAGER"],
+  collect: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER","BRAND_MANAGER"],
+  "audit-prix": ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER","BRAND_MANAGER"],
+  merchandising: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER","BRAND_MANAGER"],
   analytics: ["ADMIN", "MANAGER", "BRAND_MANAGER"],
-  validation: ["ADMIN", "MANAGER", "SUPERVISOR"],
+  validation: ["ADMIN", "MANAGER", "SUPERVISOR","BRAND_MANAGER"],
   admin: ["ADMIN"],
 };
 
