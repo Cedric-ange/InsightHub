@@ -29,10 +29,38 @@ export async function POST() {
 
     const pick = <T>(arr: T[], i: number): T => arr[i % arr.length];
 
-    // 1. Table 'users'
+// 1. Table 'users' complète alignée sur la connexion rapide du frontend
     const seedUsers = [
-      { id: "agent_cedric_01", name: "Cédric Touré", email: "cedric.toure@insighthub.ci", role: "Administrateur" },
-      { id: "agent_terrain_02", name: "Amadou Koné", email: "amadou.kone@field.ci", role: "Agent" }
+      { 
+        id: "agent_cedric_01", 
+        name: "Cédric Touré", 
+        email: "cedric.toure@insighthub.ci", 
+        role: "Administrateur" 
+      },
+      { 
+        id: "agent_patrick_02", 
+        name: "Patrick Epée", 
+        email: "patrick.epee@insighthub.ci", 
+        role: "Manager" 
+      },
+      { 
+        id: "agent_dian_03", 
+        name: "Dian Delaure", 
+        email: "dian.delaure@insighthub.ci", 
+        role: "Analyste" 
+      },
+      { 
+        id: "agent_marie_04", 
+        name: "Marie Jeanne", 
+        email: "marie.jeanne@insighthub.ci", 
+        role: "Superviseur Terrain" 
+      },
+      { 
+        id: "agent_dogo_05", 
+        name: "Dogo Jean-Marc", 
+        email: "jean-marc.dogo@insighthub.ci", 
+        role: "Enquêteur" 
+      }
     ];
 
     // 2. Table 'studies'
