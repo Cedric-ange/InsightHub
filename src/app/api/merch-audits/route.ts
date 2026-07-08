@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-export const dynamic = "force-dynamic"; // ⚡ ICI : Empêche Next.js de compiler cette route statiquement
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-// ... (le reste du code reste strictement identique)
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    // ⚡ Déplacé à l'intérieur
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
     const { data, error } = await supabase
       .from("merch_audits")
       .select("*")
@@ -17,7 +17,6 @@ export async function GET() {
 
     if (error) throw error;
 
-    // ⚡ Utilisation de Record<string, unknown> pour éliminer tout mot-clé 'any'
     const camelCaseData = (data || []).map((m: Record<string, unknown>) => ({
       id: m.id as string,
       outlet: m.outlet as string,
