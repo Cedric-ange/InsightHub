@@ -91,6 +91,8 @@ export default function StudiesPage() {
                 </Link>
                 <button
                   onClick={() => remove(s.id)}
+                  aria-label="Supprimer le questionnaire"
+                  title="Supprimer"
                   className="btn-secondary py-1.5 text-xs text-red-600 hover:bg-red-50"
                 >
                   <Trash2 size={14} />
