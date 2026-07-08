@@ -130,8 +130,8 @@ export const useSync = create<SyncState>((set, get) => ({
     try {
       const response = await fetch(`/api/seed?_t=${Date.now()}`); 
       if (response.ok) {
-        // La route de seed met à jour Supabase et IndexedDB via le cloud
         console.log("Catalogue mis à jour avec succès depuis Supabase.");
+        // 🚫 SUPPRESSION DU window.location.reload() QUI COUPE LA SESSION
       }
     } catch (e) {
       console.error("Impossible de rafraîchir le catalogue cloud", e);
