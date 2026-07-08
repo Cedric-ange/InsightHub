@@ -68,7 +68,7 @@ export default function LoginPage() {
         </div>
         <div>
           <h2 className="text-3xl font-bold leading-tight">
-            Votre Nielsen / Kantar interne.
+            Votre Outil de Fiel Intelligence
           </h2>
           <p className="mt-4 max-w-md text-brand-200">
             Collecte terrain digitale offline, audit prix, merchandising et
@@ -82,7 +82,7 @@ export default function LoginPage() {
           </ul>
         </div>
         <div className="text-xs text-brand-300">
-          © {new Date().getFullYear()} InsightHub · Pilote Côte d&apos;Ivoire
+          © {new Date().getFullYear()} InsightHub · Pilote RoSSA
         </div>
       </div>
 
