@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// On initialise le client Supabase Server-side
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function GET() {
   try {
-    // Récupère les vraies soumissions triées par date
     const { data, error } = await supabase
       .from("submissions")
       .select("*")
@@ -16,24 +14,25 @@ export async function GET() {
 
     if (error) throw error;
 
-    // Remappage des colonnes snake_case de Supabase vers le camelCase du frontend
-    const camelCaseData = (data || []).map((s) => ({
-      id: s.id,
-      studyId: s.study_id,
-      studyTitle: s.study_title,
-      agentId: s.agent_id,
-      agentName: s.agent_name,
+    // ⚡ Utilisation de Record<string, unknown> pour éliminer tout mot-clé 'any'
+    const camelCaseData = (data || []).map((s: Record<string, unknown>) => ({
+      id: s.id as string,
+      studyId: s.study_id as string,
+      studyTitle: s.study_title as string,
+      agentId: s.agent_id as string,
+      agentName: s.agent_name as string,
       answers: s.answers,
       geo: s.geo,
-      startedAt: s.started_at,
-      finishedAt: s.finished_at,
-      durationSec: s.duration_sec,
-      validation: s.validation,
-      createdAt: s.created_at,
+      startedAt: s.started_at as number,
+      finishedAt: s.finished_at as number,
+      durationSec: s.duration_sec as number,
+      validation: s.validation as string,
+      createdAt: s.created_at as number,
     }));
 
     return NextResponse.json({ success: true, data: camelCaseData });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Erreur inconnue";
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

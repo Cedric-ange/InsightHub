@@ -14,27 +14,29 @@ export async function GET() {
 
     if (error) throw error;
 
-    const camelCaseData = (data || []).map((m) => ({
-      id: m.id,
-      outlet: m.outlet,
-      channel: m.channel,
-      brand: m.brand,
-      isOwnBrand: m.is_own_brand,
-      facings: m.facings,
-      shelfLengthCm: m.shelf_length_cm,
-      shelfPosition: m.shelf_position,
-      outOfStock: m.out_of_stock,
-      plvPresent: m.plv_present,
-      activationPresent: m.activation_present,
-      region: m.region,
+    // ⚡ Utilisation de Record<string, unknown> pour éliminer tout mot-clé 'any'
+    const camelCaseData = (data || []).map((m: Record<string, unknown>) => ({
+      id: m.id as string,
+      outlet: m.outlet as string,
+      channel: m.channel as string,
+      brand: m.brand as string,
+      isOwnBrand: m.is_own_brand as boolean,
+      facings: m.facings as number,
+      shelfLengthCm: m.shelf_length_cm as number,
+      shelfPosition: m.shelf_position as string,
+      outOfStock: m.out_of_stock as boolean,
+      plvPresent: m.plv_present as boolean,
+      activationPresent: m.activation_present as boolean,
+      region: m.region as string | null,
       geo: m.geo,
-      agentId: m.agent_id,
-      agentName: m.agent_name,
-      createdAt: m.created_at,
+      agentId: m.agent_id as string,
+      agentName: m.agent_name as string,
+      createdAt: m.created_at as number,
     }));
 
     return NextResponse.json({ success: true, data: camelCaseData });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Erreur inconnue";
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
