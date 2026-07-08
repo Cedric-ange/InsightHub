@@ -11,12 +11,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Email requis" }, { status: 400 });
     }
 
-    // ⚡ Connexion Directe avec la vraie adresse officielle Supabase en dur pour le test
+    // ⚡ Connexion Directe avec l'adresse officielle et corrigée sans faute de frappe
     const sql = postgres("postgresql://postgres:AngeToure1201@db.jiksjtyvivyvmscryrt.supabase.co:5432/postgres", { 
       ssl: "require" 
     });
 
-    // Recherche de l'utilisateur
+    // On va chercher l'utilisateur dans la table
     const users = await sql`
       SELECT id, name, email, role, region, active 
       FROM users 
