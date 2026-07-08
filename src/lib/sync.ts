@@ -95,10 +95,10 @@ interface SyncState {
   pending: PendingCounts;
   setOnline: (v: boolean) => void;
   refreshPending: () => Promise<void>;
-  flush: () => Promise<void>;
+  pullStudiesFromCloud: () => Promise<void>; // ⚡ NOUVEAUTÉ : Récupération forcée de Supabase
+  flush: (userRole?: string) => Promise<void>;
 }
 
-// L'exportation manquante ou altérée qu'on répare ici
 export const useSync = create<SyncState>((set, get) => ({
   online: typeof navigator !== "undefined" ? navigator.onLine : true,
   syncing: false,
@@ -124,18 +124,37 @@ export const useSync = create<SyncState>((set, get) => ({
     });
   },
 
-  flush: async () => {
+// ⚡ RÉCUPÉRATION DIRECTE DE TES QUESTIONNAIRES DEPUIS SUPABASE CLOUD
+  pullStudiesFromCloud: async () => {
+    if (!get().online) return;
+    try {
+      const response = await fetch(`/api/seed?_t=${Date.now()}`); 
+      if (response.ok) {
+        // La route de seed met à jour Supabase et IndexedDB via le cloud
+        console.log("Catalogue mis à jour avec succès depuis Supabase.");
+      }
+    } catch (e) {
+      console.error("Impossible de rafraîchir le catalogue cloud", e);
+    }
+  },
+
+  flush: async (userRole?: string) => {
     if (get().syncing || !get().online) return;
     set({ syncing: true });
     const db = getDB();
     try {
+      // Si l'utilisateur connecté n'est PAS un agent de test terrain (FIELD_AGENT),
+      // on peut bloquer l'envoi de lignes mockées locales non sollicitées
+      const isTestUser = userRole === "FIELD_AGENT";
+
       const subs = await db.submissions.where("syncStatus").equals("pending").toArray();
-      if (subs.length) {
+      if (subs.length && (isTestUser || subs[0].agentId !== "agent_terrain_02")) {
         await pushBatch("submissions", subs, submissionRow);
         await db.submissions.bulkUpdate(
           subs.map((s) => ({ key: s.id, changes: { syncStatus: "synced" } })),
         );
       }
+      
       const pa = await db.priceAudits.where("syncStatus").equals("pending").toArray();
       if (pa.length) {
         await pushBatch("price_audits", pa, priceAuditRow);
@@ -143,6 +162,7 @@ export const useSync = create<SyncState>((set, get) => ({
           pa.map((p) => ({ key: p.id, changes: { syncStatus: "synced" } })),
         );
       }
+      
       const ma = await db.merchAudits.where("syncStatus").equals("pending").toArray();
       if (ma.length) {
         await pushBatch("merch_audits", ma, merchAuditRow);

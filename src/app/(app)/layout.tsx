@@ -7,6 +7,7 @@ import { Topbar } from "@/components/layout/Topbar";
 import { canAccess, landingPath, useAuth } from "@/lib/auth";
 import { NAV_ITEMS } from "@/components/layout/nav";
 import { cn } from "@/lib/utils";
+import { useSync } from "@/lib/sync"; // ⚡ Import du moteur de synchronisation
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -14,6 +15,35 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = useAuth((s) => s.user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ready, setReady] = useState(false);
+
+  // Récupération des actions du store de synchronisation
+  const { flush, pullStudiesFromCloud, refreshPending } = useSync();
+
+  // 🔄 BOUCLE DE SYNCHRONISATION AUTOMATIQUE & PÉRIODIQUE (Toutes les 30 secondes)
+  useEffect(() => {
+    if (!user) return;
+
+    // 1. Chargement et vérification initiale immédiate
+    refreshPending();
+    if (user.role !== "FIELD_AGENT") {
+      pullStudiesFromCloud();
+    }
+
+    // 2. Initialisation de la routine d'arrière-plan avec Supabase
+    const interval = setInterval(async () => {
+      console.log("🔄 Synchronisation périodique automatique avec Supabase...");
+      
+      // Pousse les données collectées localement si nécessaire
+      await flush(user.role);
+      
+      // Si c'est un profil décisionnaire, on actualise le catalogue de formulaires
+      if (user.role !== "FIELD_AGENT") {
+        await pullStudiesFromCloud();
+      }
+    }, 30000); // 30000 ms = 30 secondes
+
+    return () => clearInterval(interval);
+  }, [user, flush, pullStudiesFromCloud, refreshPending]);
 
   // Auth guard + per-area role guard (client-side; auth is persisted locally).
   useEffect(() => {
