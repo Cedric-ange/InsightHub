@@ -17,100 +17,139 @@ export async function GET() {
       auth: { persistSession: false },
     });
 
-    // 1. Initialisation des Études (Questionnaires de référence)
+    const now = Date.now();
+    const day = 86_400_000;
+
+    const REGIONS = ["Abidjan - Lagunes", "Bouaké - Vallée du Bandama", "San Pedro - Bas-Sassandra"];
+    const OUTLETS = ["Supermarché Prosuma Hayat", "Carrefour Marcory", "CDCI Yopougon", "Kiosque Adjamé", "Boutique de quartier Yopougon"];
+    const CHANNELS = ["Hypermarché", "Supermarché", "Boutique Traditionnelle", "Kiosque"];
+
+    const pick = <T>(arr: T[], i: number): T => arr[i % arr.length];
+
+    // 1. Table 'users'
+    const seedUsers = [
+      { id: "agent_cedric_01", name: "Cédric Touré", email: "cedric.toure@insighthub.ci", role: "Administrateur" },
+      { id: "agent_terrain_02", name: "Amadou Koné", email: "amadou.kone@field.ci", role: "Agent" }
+    ];
+
+    // 2. Table 'studies'
     const seedStudies = [
       {
-        id: "study_lait_concentre_2026",
-        title: "Lancement Pilote Abidjan 2026 - Lait Concentré",
-        description: "Suivi de la disponibilité, des prix et des facings Bonnet Rouge vs Peak/Loya.",
-        category: "Études consommateurs"
+        id: "guide_retail",
+        title: "Consumer Connect — Grande distribution",
+        description: "Guide d'entretien chef de rayon / manager (Auchan, Prosuma, Carrefour). Référencement, promotions, ruptures et réaction prix Bonnet Rouge.",
+        category: "consumer"
       },
       {
-        id: "study_lait_poudre_2026",
-        title: "Consumer Connect — Lait en Poudre & Nutrition",
-        description: "Analyse de la pénétration des formats sachets Bonnet Rouge Poudre vs Nido/Milo.",
-        category: "Études consommateurs"
+        id: "guide_consumer",
+        title: "Consumer Connect — Consommateurs",
+        description: "Guide d'entretien consommateur en sortie de marché / point de vente. Critères de choix, confiance de marque et budget lait.",
+        category: "consumer"
       }
     ];
 
-    // 2. Initialisation d'Audits de Prix témoins (Mockups réalistes de départ)
-    const seedPriceAudits = [
-      {
-        id: "seed_pa_001",
-        outlet: "Supermarché Prosuma Hayat",
-        channel: "Supermarché",
-        brand: "Bonnet Rouge",
-        is_own_brand: true,
-        product: "Lait Concentré Sucré Bonnet Rouge - Boite 400g",
-        price: 750,
-        promo: false,
-        available: true,
-        facings: 6,
-        region: "Abidjan - Lagunes",
+    // 3. Table 'price_audits' (Génération exacte des 30 relevés du Mockup)
+    const seedPriceAudits = [];
+    const productsOwn = ["Lait Concentré Sucré Bonnet Rouge 400g", "Lait en Poudre Bonnet Rouge Sachet 400g"];
+    const productsComp = ["Lait Concentré Peak 170g", "Lait en Poudre Loya Sachet 400g", "Lait en Poudre Nido Boîte 400g"];
+
+    for (let i = 0; i < 30; i++) {
+      const own = i % 2 === 0;
+      seedPriceAudits.push({
+        id: `seed_pa_${String(i + 1).padStart(0, '3')}`,
+        outlet: pick(OUTLETS, i),
+        channel: pick(CHANNELS, i),
+        brand: own ? "Bonnet Rouge" : pick(["Peak", "Loya", "Nido"], i),
+        is_own_brand: own,
+        product: own ? pick(productsOwn, i) : pick(productsComp, i),
+        price: own ? (i % 2 === 0 ? 750 : 1800) : (i % 3 === 0 ? 500 : 1900),
+        promo: i % 5 === 0,
+        available: i % 8 !== 0,
+        facings: 3 + (i % 5),
+        region: pick(REGIONS, i),
         agent_id: "agent_cedric_01",
         agent_name: "Cédric Touré",
-        created_at: Date.now()
-      },
-      {
-        id: "seed_pa_002",
-        outlet: "Boutique de quartier Adjamé",
-        channel: "Boutique Traditionnelle",
-        brand: "Peak",
-        is_own_brand: false,
-        product: "Lait Concentré Non Sucré Peak - Boite 170g",
-        price: 500,
-        promo: false,
-        available: true,
-        facings: 3,
-        region: "Abidjan - Lagunes",
+        created_at: now - (i % 12) * day
+      });
+    }
+
+    // 4. Table 'merch_audits' (Génération des 24 relevés de linéaires conformes)
+    const seedMerchAudits = [];
+    const positions = ["eye", "top", "middle", "bottom"];
+
+    for (let i = 0; i < 24; i++) {
+      const own = i % 2 === 0;
+      seedMerchAudits.push({
+        id: `seed_ma_${String(i + 1).padStart(0, '3')}`,
+        outlet: pick(OUTLETS, i),
+        channel: pick(CHANNELS, i),
+        brand: own ? "Bonnet Rouge" : pick(["Peak", "Loya"], i),
+        is_own_brand: own,
+        facings: own ? 6 + (i % 4) : 3 + (i % 3),
+        shelf_length_cm: own ? 120 : 60,
+        shelf_position: own ? "eye" : pick(positions, i),
+        out_of_stock: i % 9 === 0,
+        plv_present: own || i % 4 === 0,
+        activation_present: own && i % 3 === 0,
+        region: pick(REGIONS, i),
         agent_id: "agent_cedric_01",
         agent_name: "Cédric Touré",
-        created_at: Date.now()
-      },
-      {
-        id: "seed_pa_003",
-        outlet: "Marché de Marcory",
-        channel: "Marché traditionnel",
-        brand: "Loya",
-        is_own_brand: false,
-        product: "Lait en Poudre Loya - Sachet 400g",
-        price: 1900,
-        promo: false,
-        available: true,
-        facings: 4,
-        region: "Abidjan - Lagunes",
+        created_at: now - (i % 10) * day
+      });
+    }
+
+    // 5. Table 'submissions' (Génération de 40 soumissions de formulaires)
+    const seedSubmissions = [];
+    const choiceVals = ["Prix", "Marque (Ex: Bonnet Rouge)", "Format Sachet/Boîte", "Habitude familiale"];
+    const budgetVals = ["A augmenté", "Est stable", "A diminué"];
+
+    for (let i = 0; i < 40; i++) {
+      const started = now - (i % 14) * day - i * 3600_000;
+      const dur = 120 + (i % 8) * 30;
+      seedSubmissions.push({
+        id: `seed_sub_${String(i + 1).padStart(0, '3')}`,
+        study_id: "guide_consumer",
+        study_title: "Consumer Connect — Consommateurs",
         agent_id: "agent_cedric_01",
         agent_name: "Cédric Touré",
-        created_at: Date.now()
-      }
-    ];
+        answers: {
+          gc_criteria: pick(choiceVals, i),
+          gc_trust: i % 3 !== 0,
+          gc_budget: pick(budgetVals, i),
+          gc_nps: 8 + (i % 3)
+        },
+        geo: { lat: 5.3484 + (i % 5) * 0.01, lng: -3.9785 - (i % 5) * 0.01 },
+        started_at: new Date(started).toISOString(),
+        finished_at: new Date(started + dur * 1000).toISOString(),
+        duration_sec: dur,
+        validation: i % 4 === 0 ? "submitted" : "validated",
+        created_at: new Date(started + dur * 1000).toISOString()
+      });
+    }
 
-    // Injection dans la table 'studies'
-    const { error: errorStudies } = await supabase
-      .from("studies")
-      .upsert(seedStudies, { onConflict: "id" });
-
-    if (errorStudies) throw new Error(`Erreur studies: ${errorStudies.message}`);
-
-    // Injection dans la table 'price_audits'
-    const { error: errorPrices } = await supabase
-      .from("price_audits")
-      .upsert(seedPriceAudits, { onConflict: "id" });
-
-    if (errorPrices) throw new Error(`Erreur price_audits: ${errorPrices.message}`);
+    // Exécution des requêtes d'initialisation propre (Upsert) dans Supabase
+    await Promise.all([
+      supabase.from("users").upsert(seedUsers, { onConflict: "id" }),
+      supabase.from("studies").upsert(seedStudies, { onConflict: "id" }),
+      supabase.from("price_audits").upsert(seedPriceAudits, { onConflict: "id" }),
+      supabase.from("merch_audits").upsert(seedMerchAudits, { onConflict: "id" }),
+      supabase.from("submissions").upsert(seedSubmissions, { onConflict: "id" })
+    ]);
 
     return NextResponse.json({
       success: true,
-      message: "La base de données Supabase a été initialisée avec succès avec les données réelles !",
-      studiesInserted: seedStudies.length,
-      priceAuditsInserted: seedPriceAudits.length
+      message: "Toutes les tables Supabase Cloud ont été synchronisées avec succès pour la Prod Bonnet Rouge !",
+      stats: {
+        users: seedUsers.length,
+        studies: seedStudies.length,
+        priceAudits: seedPriceAudits.length,
+        merchAudits: seedMerchAudits.length,
+        submissions: seedSubmissions.length
+      }
     });
 
   } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Erreur interne lors du seed";
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    const errorMessage = err instanceof Error ? err.message : "Erreur lors du seed global";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
