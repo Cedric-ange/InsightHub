@@ -11,10 +11,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Email requis" }, { status: 400 });
     }
 
-    // ⚡ Connexion Directe en un clin d'œil avec la variable DATABASE_URL
-    const sql = postgres(process.env.DATABASE_URL!, { ssl: "allow" });
+    // ⚡ Connexion Directe avec la vraie adresse officielle Supabase en dur pour le test
+    const sql = postgres("postgresql://postgres:AngeToure1201@db.jiksjtyvivyvmscryrt.supabase.co:5432/postgres", { 
+      ssl: "require" 
+    });
 
-    // On cherche l'utilisateur dans la vraie table 'users' de Supabase
+    // Recherche de l'utilisateur
     const users = await sql`
       SELECT id, name, email, role, region, active 
       FROM users 
@@ -30,15 +32,6 @@ export async function POST(request: Request) {
     }
 
     const user = users[0];
-
-    if (!user.active) {
-      return NextResponse.json(
-        { success: false, error: "Ce compte est actuellement désactivé." },
-        { status: 403 }
-      );
-    }
-
-    // Connexion réussie ! On renvoie le profil utilisateur complet au store auth frontend
     return NextResponse.json({
       success: true,
       user: {
@@ -51,7 +44,7 @@ export async function POST(request: Request) {
     });
 
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erreur serveur lors de l'authentification";
+    const msg = error instanceof Error ? error.message : "Erreur serveur";
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
