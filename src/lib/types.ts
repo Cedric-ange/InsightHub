@@ -3,14 +3,14 @@
 export type Role =
   | "ADMIN"
   | "MANAGER"
-  | "ANALYST"
+  | "BRAND_MANAGER"
   | "SUPERVISOR"
   | "FIELD_AGENT";
 
 export const ROLE_LABELS: Record<Role, string> = {
   ADMIN: "Administrateur",
   MANAGER: "Manager",
-  ANALYST: "Analyste",
+  BRAND_MANAGER: "Gestionnaire de marque",
   SUPERVISOR: "Superviseur Terrain",
   FIELD_AGENT: "Enquêteur",
 };

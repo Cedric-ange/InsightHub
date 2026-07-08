@@ -31,10 +31,10 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     password: "demo",
   },
   {
-    id: "u_analyst",
+    id: "u_BRAND_MANAGER",
     name: "Dian Delaure",
     email: "dian.delaure@frieslandcampina.com",
-    role: "ANALYST",
+    role: "BRAND_MANAGER",
     region: "Abidjan",
     active: true,
     createdAt: Date.now(),
@@ -97,12 +97,12 @@ export const useAuth = create<AuthState>()(
 
 // Mappage strict des rôles applicatifs
 export const ROLE_ACCESS: Record<string, Role[]> = {
-  dashboard: ["ADMIN", "MANAGER", "ANALYST", "SUPERVISOR"],
-  studies: ["ADMIN", "MANAGER", "ANALYST"],
-  collect: ["ADMIN", "SUPERVISOR", "FIELD_AGENT"],
-  "audit-prix": ["ADMIN", "SUPERVISOR", "FIELD_AGENT"],
-  merchandising: ["ADMIN", "SUPERVISOR", "FIELD_AGENT"],
-  analytics: ["ADMIN", "MANAGER", "ANALYST"],
+  dashboard: ["ADMIN", "MANAGER", "BRAND_MANAGER", "SUPERVISOR"],
+  studies: ["ADMIN", "MANAGER", "BRAND_MANAGER"],
+  collect: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
+  "audit-prix": ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
+  merchandising: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER"],
+  analytics: ["ADMIN", "MANAGER", "BRAND_MANAGER"],
   validation: ["ADMIN", "MANAGER", "SUPERVISOR"],
   admin: ["ADMIN"],
 };
