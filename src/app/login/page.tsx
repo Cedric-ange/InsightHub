@@ -2,25 +2,59 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DEMO_ACCOUNTS, landingPath, useAuth } from "@/lib/auth";
+import { landingPath, useAuth } from "@/lib/auth";
 import { ROLE_LABELS } from "@/lib/types";
-import { LogIn, ChevronRight } from "lucide-react";
+import { LogIn, ChevronRight, Loader2 } from "lucide-react";
+
+// On duplique proprement la liste avec les vrais emails et mots de passe du Seed pour les boutons
+const REAL_DEVICES_ACCOUNTS = [
+  { name: "Cédric Touré", email: "cedric.toure@insighthub.ci", password: "FC_Admin_Abidjan2026!", role: "admin" },
+  { name: "Patrick Epée", email: "patrick.epee@insighthub.ci", password: "FC_Manager_Epee2026*", role: "manager" },
+  { name: "Dian Delaure", email: "dian.delaure@insighthub.ci", password: "FC_Analyst_Delaure!", role: "analyst" },
+  { name: "Marie Jeanne", email: "marie.jeanne@insighthub.ci", password: "FC_Super_Marie2026", role: "supervisor" },
+  { name: "Dogo Jean-Marc", email: "jean-marc.dogo@insighthub.ci", password: "FC_Field_Dogo2026", role: "field" }
+];
 
 export default function LoginPage() {
   const router = useRouter();
-  const login = useAuth((s) => s.login);
-  const loginAs = useAuth((s) => s.loginAs);
+  const setSession = useAuth((s) => s.loginAs); // Utilise le store Zustand pour stocker l'utilisateur connecté
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Fonction principale de connexion via l'API Backend
+  const handleLogin = async (targetEmail: string, targetPass: string) => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: targetEmail, password: targetPass }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Identifiants invalides");
+      }
+
+      // Si le backend valide, on synchronise l'état global frontend (Zustand)
+      setSession(data.user);
+      router.replace(landingPath(data.user.role));
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Une erreur est survenue lors de la connexion.";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = login(email, password);
-    if (res.ok) {
-      const { user } = useAuth.getState();
-      router.replace(landingPath(user?.role));
-    } else setError(res.error ?? "Erreur");
+    handleLogin(email, password);
   };
 
   return (
@@ -79,6 +113,7 @@ export default function LoginPage() {
               <input
                 className="input"
                 type="email"
+                disabled={loading}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="adresse mail"
@@ -90,6 +125,7 @@ export default function LoginPage() {
               <input
                 className="input"
                 type="password"
+                disabled={loading}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Mot de passe"
@@ -97,29 +133,33 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
-            <button type="submit" className="btn-primary w-full">
-              <LogIn size={16} /> Se connecter
+            <button type="submit" disabled={loading} className="btn-primary w-full flex justify-center items-center gap-2">
+              {loading ? <Loader2 size={16} className="animate-spin" /> : <LogIn size={16} />}
+              Se connecter
             </button>
           </form>
 
           <div className="mt-8">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-              Connexion rapide (démo)
+              Simulation Session Réelle (RH)
             </p>
             <div className="space-y-2">
-              {DEMO_ACCOUNTS.map((acc) => (
+              {REAL_DEVICES_ACCOUNTS.map((acc) => (
                 <button
-                  key={acc.id}
+                  key={acc.email}
+                  type="button"
+                  disabled={loading}
                   onClick={() => {
-                    loginAs(acc);
-                    router.replace(landingPath(acc.role));
+                    setEmail(acc.email);
+                    setPassword(acc.password);
+                    handleLogin(acc.email, acc.password);
                   }}
                   className="flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-left text-sm hover:border-brand-300 hover:bg-brand-50"
                 >
                   <span>
                     <span className="font-medium text-slate-800">{acc.name}</span>
                     <span className="ml-2 text-xs text-slate-500">
-                      {ROLE_LABELS[acc.role]}
+                      {ROLE_LABELS[acc.role as keyof typeof ROLE_LABELS] || acc.role}
                     </span>
                   </span>
                   <ChevronRight size={16} className="text-slate-400" />
@@ -127,8 +167,7 @@ export default function LoginPage() {
               ))}
             </div>
             <p className="mt-3 text-xs text-slate-400">
-              Mot de passe pour tous les comptes : <code>demo</code>. Prêt à
-              basculer vers Microsoft Entra ID (MFA) en production.
+              Chaque clic interroge dynamiquement la table <code>users</code> de Supabase Cloud avec son mot de passe unique.
             </p>
           </div>
         </div>

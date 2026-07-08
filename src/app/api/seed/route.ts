@@ -29,37 +29,42 @@ export async function POST() {
 
     const pick = <T>(arr: T[], i: number): T => arr[i % arr.length];
 
-// 1. Table 'users' complète alignée sur la connexion rapide du frontend
+// 1. Table 'users' complète avec mots de passe uniques de production
     const seedUsers = [
       { 
         id: "agent_cedric_01", 
         name: "Cédric Touré", 
         email: "cedric.toure@insighthub.ci", 
-        role: "Administrateur" 
+        role: "Administrateur",
+        password: "FC_Admin_Abidjan2026!"
       },
       { 
         id: "agent_patrick_02", 
         name: "Patrick Epée", 
         email: "patrick.epee@insighthub.ci", 
-        role: "Manager" 
+        role: "Manager",
+        password: "FC_Manager_Epee2026*"
       },
       { 
         id: "agent_dian_03", 
         name: "Dian Delaure", 
         email: "dian.delaure@insighthub.ci", 
-        role: "Analyste" 
+        role: "Analyste",
+        password: "FC_Analyst_Delaure!"
       },
       { 
         id: "agent_marie_04", 
         name: "Marie Jeanne", 
         email: "marie.jeanne@insighthub.ci", 
-        role: "Superviseur Terrain" 
+        role: "Superviseur Terrain",
+        password: "FC_Super_Marie2026"
       },
       { 
         id: "agent_dogo_05", 
         name: "Dogo Jean-Marc", 
         email: "jean-marc.dogo@insighthub.ci", 
-        role: "Enquêteur" 
+        role: "Enquêteur",
+        password: "FC_Field_Dogo2026"
       }
     ];
 
