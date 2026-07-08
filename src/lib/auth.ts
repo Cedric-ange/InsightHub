@@ -5,7 +5,6 @@ import { persist } from "zustand/middleware";
 import type { Role, User } from "./types";
 
 // Mock credentials — designed to be swapped for Microsoft Entra ID (MSAL) later.
-// The demo accounts below let you explore every role without a backend.
 export interface DemoAccount extends User {
   password: string;
 }
@@ -14,7 +13,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     id: "u_admin",
     name: "Cédric Touré",
-    email: "cedric.toure@frieslandcampina.cm",
+    email: "cedric.toure@frieslandcampina.com", // ⚡ Corrigé en .com
     role: "ADMIN",
     region: "Abidjan",
     active: true,
@@ -66,7 +65,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
 interface AuthState {
   user: User | null;
   login: (email: string, password: string) => { ok: boolean; error?: string };
-  loginAs: (account: DemoAccount) => void;
+  loginAs: (account: Partial<User>) => void; // ⚡ Typage assoupli pour accepter les retours API
   logout: () => void;
 }
 
@@ -87,9 +86,8 @@ export const useAuth = create<AuthState>()(
         return { ok: true };
       },
       loginAs: (account) => {
-        const { password: _pw, ...user } = account;
-        void _pw;
-        set({ user });
+        // Force l'objet utilisateur à s'enregistrer dans Zustand
+        set({ user: account as User });
       },
       logout: () => set({ user: null }),
     }),
@@ -97,7 +95,7 @@ export const useAuth = create<AuthState>()(
   ),
 );
 
-// Which roles may access each feature area.
+// Mappage strict des rôles applicatifs
 export const ROLE_ACCESS: Record<string, Role[]> = {
   dashboard: ["ADMIN", "MANAGER", "ANALYST", "SUPERVISOR"],
   studies: ["ADMIN", "MANAGER", "ANALYST"],
@@ -115,9 +113,6 @@ export function canAccess(role: Role | undefined, area: string): boolean {
   return !allowed || allowed.includes(role);
 }
 
-// Order in which areas are offered as a landing page after login. The first
-// area the role can access becomes its home (e.g. FIELD_AGENT -> /collect),
-// which avoids redirect loops for roles without dashboard access.
 const LANDING_ORDER = [
   "dashboard",
   "collect",
@@ -129,7 +124,10 @@ const LANDING_ORDER = [
   "admin",
 ] as const;
 
-export function landingPath(role: Role | undefined): string {
-  const area = LANDING_ORDER.find((a) => canAccess(role, a));
+export function landingPath(role: string | undefined): string {
+  if (!role) return "/login";
+  // Normalisation de sécurité pour faire correspondre "field" -> "FIELD_AGENT"
+  const cleanRole = role.toUpperCase() === "FIELD" ? "FIELD_AGENT" : role.toUpperCase();
+  const area = LANDING_ORDER.find((a) => canAccess(cleanRole as Role, a));
   return `/${area ?? "login"}`;
 }

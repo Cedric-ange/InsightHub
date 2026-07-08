@@ -6,9 +6,8 @@ import { landingPath, useAuth } from "@/lib/auth";
 import { ROLE_LABELS } from "@/lib/types";
 import { LogIn, ChevronRight, Loader2 } from "lucide-react";
 
-// Compte de simulation terrain aligné sur la base de données
 const REAL_DEVICES_ACCOUNTS = [
-  { name: "Test User", email: "user.test@frieslandcampina.com", password: "demo", role: "field" }
+  { name: "Test User", email: "user.test@frieslandcampina.com", password: "demo", role: "FIELD_AGENT" }
 ];
 
 export default function LoginPage() {
@@ -19,13 +18,11 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Fonction principale de connexion via l'API Backend
   const handleLogin = async (targetEmail: string, targetPass: string) => {
     setError(null);
     setLoading(true);
 
     try {
-      // ⚡ CONTOURNEMENT SERVICE WORKER : Ajout d'un timestamp unique pour forcer le passage réseau direct
       const response = await fetch(`/api/login?_t=${Date.now()}`, {
         method: "POST",
         headers: { 
@@ -41,9 +38,21 @@ export default function LoginPage() {
         throw new Error(data.error || "Identifiants invalides");
       }
 
-      // Synchronisation de l'état de session global (Zustand)
-      setSession(data.user);
-      router.replace(landingPath(data.user.role));
+      // ⚡ NORMALISATION CRITIQUE : Conversion et mappage des rôles pour le routeur
+      let finalRole = data.user.role.toUpperCase();
+      if (finalRole === "FIELD") finalRole = "FIELD_AGENT";
+
+      const sessionUser = {
+        ...data.user,
+        role: finalRole
+      };
+
+      // Enregistrement dans le store global local
+      setSession(sessionUser);
+
+      // Déclenchement de la redirection vers le bon dossier applicatif
+      const path = landingPath(finalRole);
+      router.replace(path);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Une erreur est survenue lors de la connexion.";
       setError(errorMessage);

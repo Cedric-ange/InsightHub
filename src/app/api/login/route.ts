@@ -28,13 +28,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Identifiants invalides." }, { status: 401 });
     }
 
+// Retourne le profil utilisateur s'il est validé en forçant le rôle en MAJUSCULES
     return NextResponse.json({
       success: true,
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role.toUpperCase() // ⚡ ICI : Aligne le format pour Zustand
       }
     });
 
