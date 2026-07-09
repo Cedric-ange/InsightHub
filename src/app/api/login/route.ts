@@ -11,12 +11,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Email requis" }, { status: 400 });
     }
 
-    // ⚡ Connexion Directe avec l'adresse officielle et corrigée sans faute de frappe
-    const sql = postgres("postgresql://postgres:AngeToure1201@db.jiksjtyvivyvmscryrt.supabase.co:5432/postgres", { 
-      ssl: "require" 
-    });
+    // On utilise la variable d'environnement proprement
+    const sql = postgres(process.env.DATABASE_URL!);
 
-    // On va chercher l'utilisateur dans la table
     const users = await sql`
       SELECT id, name, email, role, region, active 
       FROM users 
@@ -26,7 +23,7 @@ export async function POST(request: Request) {
 
     if (users.length === 0) {
       return NextResponse.json(
-        { success: false, error: "Utilisateur inconnu dans la base Supabase Cloud." },
+        { success: false, error: "Utilisateur inconnu." },
         { status: 401 }
       );
     }
