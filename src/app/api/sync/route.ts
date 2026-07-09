@@ -1,47 +1,53 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import postgres from "postgres";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
-// Remplace la lecture des variables par cette double vérification :
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+    const { submissions, priceAudits, merchAudits } = await request.json();
 
-if (!url || !key) {
-  return NextResponse.json(
-    { error: "Variables Supabase manquantes pour la synchronisation des soumissions." },
-    { status: 500 }
-  );
-}
+    // Connexion Pooler Validée
+    const sql = postgres("postgresql://postgres.jiksjctyvivyvmscryrt:AngeToure1234@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require");
 
-    const supabase = createClient(url, key, {
-      auth: { persistSession: false },
-    });
-
-    const body = await request.json();
-    const { table, records } = body;
-
-    if (!table || !records || !Array.isArray(records)) {
-      return NextResponse.json(
-        { error: "Format de requête invalide." },
-        { status: 400 }
-      );
+    // 1. Sauvegarde des soumissions
+    if (submissions && submissions.length > 0) {
+      for (const s of submissions) {
+        await sql`
+          INSERT INTO submissions (id, study_id, study_title, agent_id, agent_name, answers, geo, started_at, finished_at, duration_sec, validation)
+          VALUES (${s.id}, ${s.studyId}, ${s.studyTitle}, ${s.agentId}, ${s.agentName}, ${sql.json(s.answers)}, ${sql.json(s.geo)}, ${s.startedAt}, ${s.finishedAt}, ${s.durationSec}, ${s.validation || "pending"})
+          ON CONFLICT (id) DO NOTHING
+        `;
+      }
     }
 
-    const { error } = await supabase
-      .from(table)
-      .upsert(records, { onConflict: "id" });
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    // 2. Sauvegarde des audits de prix
+    if (priceAudits && priceAudits.length > 0) {
+      for (const p of priceAudits) {
+        await sql`
+          INSERT INTO price_audits (id, outlet, channel, brand, is_own_brand, product, price, promo, available, facings, region, geo, agent_id, agent_name)
+          VALUES (${p.id}, ${p.outlet}, ${p.channel}, ${p.brand}, ${p.isOwnBrand}, ${p.product}, ${p.price}, ${p.promo}, ${p.available}, ${p.facings}, ${p.region}, ${sql.json(p.geo)}, ${p.agentId}, ${p.agentName})
+          ON CONFLICT (id) DO NOTHING
+        `;
+      }
     }
 
-    return NextResponse.json({ success: true, count: records.length });
-    } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : "Erreur interne";
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    // 3. Sauvegarde des audits merchandising
+    if (merchAudits && merchAudits.length > 0) {
+      for (const m of merchAudits) {
+        await sql`
+          INSERT INTO merch_audits (id, outlet, channel, brand, is_own_brand, facings, shelf_length_cm, shelf_position, out_of_stock, plv_present, activation_present, region, geo, agent_id, agent_name)
+          VALUES (${m.id}, ${m.outlet}, ${m.channel}, ${m.brand}, ${m.isOwnBrand}, ${m.facings}, ${m.shelfLengthCm}, ${m.shelfPosition}, ${m.outOfStock}, ${m.plvPresent}, ${m.activationPresent}, ${m.region}, ${sql.json(m.geo)}, ${m.agentId}, ${m.agentName})
+          ON CONFLICT (id) DO NOTHING
+        `;
+      }
+    }
+
+    return NextResponse.json({ success: true, message: "Synchronisation réussie." });
+
+  } catch (error: unknown) {
+    console.error("Erreur de synchro:", error);
+    const msg = error instanceof Error ? error.message : "Erreur lors de la synchronisation";
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
