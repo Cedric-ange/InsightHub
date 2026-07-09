@@ -114,12 +114,12 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
             status: study.status,
             questions: study.questions, // Sérialisé automatiquement en JSONB
             created_by: study.createdBy,
-            createdAt: study.createdAt,
-            updatedAt: study.updatedAt
+            created_at: study.createdAt,
+            updated_at: study.updatedAt
           }, { onConflict: "id" });
 
         if (supabaseError) {
-          console.warn("Échec synchro cloud directe, conservé en local:", supabaseError.message);
+          console.warn("Échec synchro cloud directe, conservé en local :", supabaseError.message);
         }
       }
 
@@ -134,19 +134,23 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
 
   return (
     <div className="space-y-6">
-      <div className="card space-y-4 p-5">
+      <div className="card space-y-4 p-5 bg-white border border-slate-100 rounded-xl shadow-sm">
         <div>
-          <label className="label">Titre de l&apos;étude *</label>
+          <label htmlFor="study-title" className="label">Titre de l&apos;étude *</label>
           <input
+            id="study-title"
+            title="Saisir le titre de l'étude"
             className="input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ex : Dégustation nouvelle marque Biscuit"
+            placeholder="Ex : Dégustation nouvelle marque Bonnet Rouge"
           />
         </div>
         <div>
-          <label className="label">Description</label>
+          <label htmlFor="study-desc" className="label">Description</label>
           <textarea
+            id="study-desc"
+            title="Saisir les objectifs et la description"
             className="input min-h-[70px]"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -155,8 +159,10 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="label">Catégorie</label>
+            <label htmlFor="study-category" className="label">Catégorie</label>
             <select
+              id="study-category"
+              title="Sélectionner la catégorie d'étude"
               className="input"
               value={category}
               onChange={(e) => setCategory(e.target.value as StudyCategory)}
@@ -169,8 +175,10 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
             </select>
           </div>
           <div>
-            <label className="label">Statut</label>
+            <label htmlFor="study-status" className="label">Statut</label>
             <select
+              id="study-status"
+              title="Définir le statut de visibilité"
               className="input"
               value={status}
               onChange={(e) => setStatus(e.target.value as StudyStatus)}
@@ -201,6 +209,7 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
       </div>
 
       <button
+        type="button"
         className="btn-secondary w-full"
         onClick={() => setQuestions((qs) => [...qs, emptyQuestion()])}
       >
@@ -210,10 +219,10 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex justify-end gap-3">
-        <button className="btn-secondary" onClick={() => router.push("/studies")}>
+        <button type="button" className="btn-secondary" onClick={() => router.push("/studies")}>
           Annuler
         </button>
-        <button className="btn-primary" onClick={save} disabled={saving}>
+        <button type="button" className="btn-primary" onClick={save} disabled={saving}>
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer l'étude"}
         </button>
       </div>
@@ -241,8 +250,19 @@ function QuestionEditor({
   const isChoice = CHOICE_TYPES.includes(q.type);
   const isRange = RANGE_TYPES.includes(q.type);
 
+  // Identifiants uniques d'accessibilité générés par index
+  const labelId = `q-label-${index}`;
+  const typeId = `q-type-${index}`;
+  const sixpId = `q-sixp-${index}`;
+  const optionsId = `q-options-${index}`;
+  const minId = `q-min-${index}`;
+  const maxId = `q-max-${index}`;
+  const condId = `q-cond-${index}`;
+  const condValId = `q-cond-val-${index}`;
+  const checkId = `q-req-${index}`;
+
   return (
-    <div className="card p-4">
+    <div className="card p-4 bg-white border border-slate-100 rounded-xl shadow-sm">
       <div className="mb-3 flex items-center gap-2">
         <GripVertical size={16} className="text-slate-300" />
         <span className="text-xs font-semibold text-slate-400">
@@ -250,25 +270,28 @@ function QuestionEditor({
         </span>
         <div className="ml-auto flex items-center gap-1">
           <button
+            type="button"
             className="rounded p-1.5 text-slate-400 hover:bg-slate-100 disabled:opacity-30"
             onClick={() => onMove(-1)}
             disabled={index === 0}
-            aria-label="Monter"
+            aria-label={`Monter la question ${index + 1}`}
           >
             <ArrowUp size={15} />
           </button>
           <button
+            type="button"
             className="rounded p-1.5 text-slate-400 hover:bg-slate-100 disabled:opacity-30"
             onClick={() => onMove(1)}
             disabled={index === total - 1}
-            aria-label="Descendre"
+            aria-label={`Descendre la question ${index + 1}`}
           >
             <ArrowDown size={15} />
           </button>
           <button
+            type="button"
             className="rounded p-1.5 text-red-400 hover:bg-red-50"
             onClick={onRemove}
-            aria-label="Supprimer"
+            aria-label={`Supprimer la question ${index + 1}`}
           >
             <Trash2 size={15} />
           </button>
@@ -277,8 +300,10 @@ function QuestionEditor({
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className="label">Libellé *</label>
+          <label htmlFor={labelId} className="label">Libellé *</label>
           <input
+            id={labelId}
+            title={`Libellé pour la question ${index + 1}`}
             className="input"
             value={q.label}
             onChange={(e) => onChange({ label: e.target.value })}
@@ -286,8 +311,10 @@ function QuestionEditor({
           />
         </div>
         <div>
-          <label className="label">Type</label>
+          <label htmlFor={typeId} className="label">Type</label>
           <select
+            id={typeId}
+            title={`Type de réponse pour la question ${index + 1}`}
             className="input"
             value={q.type}
             onChange={(e) =>
@@ -302,8 +329,10 @@ function QuestionEditor({
           </select>
         </div>
         <div>
-          <label className="label">Pilier 6P (optionnel)</label>
+          <label htmlFor={sixpId} className="label">Pilier 6P (optionnel)</label>
           <select
+            id={sixpId}
+            title={`Pilier marketing pour la question ${index + 1}`}
             className="input"
             value={q.sixp ?? ""}
             onChange={(e) =>
@@ -321,8 +350,10 @@ function QuestionEditor({
 
         {isChoice && (
           <div className="sm:col-span-2">
-            <label className="label">Options (une par ligne)</label>
+            <label htmlFor={optionsId} className="label">Options (une par ligne)</label>
             <textarea
+              id={optionsId}
+              title={`Options de choix pour la question ${index + 1}`}
               className="input min-h-[80px]"
               value={(q.options ?? []).join("\n")}
               onChange={(e) =>
@@ -341,9 +372,12 @@ function QuestionEditor({
         {isRange && (
           <>
             <div>
-              <label className="label">Min</label>
+              <label htmlFor={minId} className="label">Min</label>
               <input
+                id={minId}
+                title={`Valeur minimale pour la question ${index + 1}`}
                 type="number"
+                placeholder="0"
                 className="input"
                 value={q.min ?? ""}
                 onChange={(e) =>
@@ -354,9 +388,12 @@ function QuestionEditor({
               />
             </div>
             <div>
-              <label className="label">Max</label>
+              <label htmlFor={maxId} className="label">Max</label>
               <input
+                id={maxId}
+                title={`Valeur maximale pour la question ${index + 1}`}
                 type="number"
+                placeholder="5"
                 className="input"
                 value={q.max ?? ""}
                 onChange={(e) =>
@@ -371,8 +408,10 @@ function QuestionEditor({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-4">
-        <label className="flex items-center gap-2 text-sm text-slate-600">
+        <label htmlFor={checkId} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
           <input
+            id={checkId}
+            title={`Rendre la question ${index + 1} obligatoire`}
             type="checkbox"
             checked={q.required}
             onChange={(e) => onChange({ required: e.target.checked })}
@@ -383,47 +422,58 @@ function QuestionEditor({
 
       {others.length > 0 && (
         <div className="mt-3 rounded-lg bg-slate-50 p-3">
-          <p className="mb-2 text-xs font-semibold text-slate-500">
+          <span className="block mb-2 text-xs font-semibold text-slate-500">
             Affichage conditionnel (saut logique)
-          </p>
+          </span>
           <div className="grid gap-2 sm:grid-cols-2">
-            <select
-              className="input"
-              value={q.condition?.questionId ?? ""}
-              onChange={(e) =>
-                onChange({
-                  condition: e.target.value
-                    ? { questionId: e.target.value, equals: [] }
-                    : undefined,
-                })
-              }
-            >
-              <option value="">Toujours afficher</option>
-              {others
-                .filter((o) => o.label.trim())
-                .map((o) => (
-                  <option key={o.id} value={o.id}>
-                    Si « {o.label} »
-                  </option>
-                ))}
-            </select>
-            {q.condition && (
-              <input
+            <div>
+              <label htmlFor={condId} className="sr-only">Sélectionner la question déclencheuse</label>
+              <select
+                id={condId}
+                title={`Question conditionnelle liée pour la question ${index + 1}`}
                 className="input"
-                placeholder="= valeur(s), séparées par des virgules"
-                value={q.condition.equals.join(", ")}
+                value={q.condition?.questionId ?? ""}
                 onChange={(e) =>
                   onChange({
-                    condition: {
-                      questionId: q.condition!.questionId,
-                      equals: e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    },
+                    condition: e.target.value
+                      ? { questionId: e.target.value, equals: [] }
+                      : undefined,
                   })
                 }
-              />
+              >
+                <option value="">Toujours afficher</option>
+                {others
+                  .filter((o) => o.label.trim())
+                  .map((o) => (
+                    <option key={o.id} value={o.id}>
+                      Si « {o.label} »
+                    </option>
+                  ))}
+              </select>
+            </div>
+            
+            {q.condition && (
+              <div>
+                <label htmlFor={condValId} className="sr-only">Valeurs de déclenhement</label>
+                <input
+                  id={condValId}
+                  title={`Valeurs attendues pour afficher la question ${index + 1}`}
+                  className="input"
+                  placeholder="= valeur(s), séparées par des virgules"
+                  value={q.condition.equals.join(", ")}
+                  onChange={(e) =>
+                    onChange({
+                      condition: {
+                        questionId: q.condition!.questionId,
+                        equals: e.target.value
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      },
+                    })
+                  }
+                />
+              </div>
             )}
           </div>
         </div>

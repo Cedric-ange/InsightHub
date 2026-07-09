@@ -105,8 +105,8 @@ export async function GET() {
 
     const tasteStudy: Record<string, unknown> = {
       id: "study_taste",
-      title: "Dégustation nouvelle marque Biscuit",
-      description: "Test de dégustation d'un nouveau biscuit avant lancement. Évaluation goût, texture, emballage et intention d'achat.",
+      title: "Dégustation nouvelle marque Bonnet rouge",
+      description: "Test de dégustation d'un nouveau Bonnet Rouge avant lancement. Évaluation goût, texture, emballage et intention d'achat.",
       category: "taste_test",
       status: "published",
       createdAt: now - 10 * day,
@@ -129,7 +129,7 @@ export async function GET() {
       seedSubmissions.push({
         id: uid("sub"),
         studyId: "study_taste",
-        studyTitle: "Dégustation nouvelle marque Biscuit",
+        studyTitle: "Dégustation nouvelle marque Bonnet rouge",
         agentId: "agent_terrain_02",
         agentName: "Amadou Koné",
         startedAt: started,

@@ -35,6 +35,7 @@ export default function AuditPrixPage() {
     brand: "Notre marque",
     product: "",
     price: "",
+    indigoWidth: "0%", // Géré proprement sans inline-style brut
     promo: false,
     available: true,
     facings: "",
@@ -124,9 +125,13 @@ export default function AuditPrixPage() {
         <Card className="mt-6 space-y-4">
           <h3 className="font-semibold text-slate-800">Nouveau relevé de prix</h3>
           <div className="grid gap-4 sm:grid-cols-2">
+            
+            {/* 1. Point de vente */}
             <div>
-              <label className="label">Point de vente</label>
+              <label htmlFor="outlet-select" className="label">Point de vente</label>
               <select
+                id="outlet-select"
+                title="Sélectionner le point de vente"
                 className="input"
                 value={form.outlet}
                 onChange={(e) => set("outlet", e.target.value)}
@@ -136,9 +141,13 @@ export default function AuditPrixPage() {
                 ))}
               </select>
             </div>
+
+            {/* 2. Canal */}
             <div>
-              <label className="label">Canal</label>
+              <label htmlFor="channel-select" className="label">Canal</label>
               <select
+                id="channel-select"
+                title="Sélectionner le canal de distribution"
                 className="input"
                 value={form.channel}
                 onChange={(e) => set("channel", e.target.value)}
@@ -148,8 +157,10 @@ export default function AuditPrixPage() {
                 ))}
               </select>
             </div>
+
+            {/* 3. Marque */}
             <div>
-              <label className="label">Marque</label>
+              <span className="label block mb-2">Marque</span>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -178,6 +189,8 @@ export default function AuditPrixPage() {
               </div>
               {!form.isOwnBrand && (
                 <input
+                  id="brand-input"
+                  title="Nom du concurrent"
                   className="input mt-2"
                   placeholder="Nom du concurrent"
                   value={form.brand}
@@ -185,9 +198,13 @@ export default function AuditPrixPage() {
                 />
               )}
             </div>
+
+            {/* 4. Région */}
             <div>
-              <label className="label">Région</label>
+              <label htmlFor="region-select" className="label">Région</label>
               <select
+                id="region-select"
+                title="Sélectionner la région de l'audit"
                 className="input"
                 value={form.region}
                 onChange={(e) => set("region", e.target.value)}
@@ -197,44 +214,62 @@ export default function AuditPrixPage() {
                 ))}
               </select>
             </div>
+
+            {/* 5. Produit */}
             <div>
-              <label className="label">Produit *</label>
+              <label htmlFor="product-input" className="label">Produit *</label>
               <input
+                id="product-input"
+                title="Saisir le libellé du produit"
                 className="input"
                 value={form.product}
                 onChange={(e) => set("product", e.target.value)}
-                placeholder="Ex : Biscuit 16g"
+                placeholder="Ex : Bonnet rouge 16g"
               />
             </div>
+
+            {/* 6. Prix observé */}
             <div>
-              <label className="label">Prix observé (FCFA) *</label>
+              <label htmlFor="price-input" className="label">Prix observé (FCFA) *</label>
               <input
+                id="price-input"
+                title="Prix observé en FCFA"
                 type="number"
                 className="input"
+                placeholder="0"
                 value={form.price}
                 onChange={(e) => set("price", e.target.value)}
               />
             </div>
+
+            {/* 7. Facings observés */}
             <div>
-              <label className="label">Facings observés</label>
+              <label htmlFor="facings-input" className="label">Facings observés</label>
               <input
+                id="facings-input"
+                title="Nombre de facings visibles sur le rayon"
                 type="number"
                 className="input"
+                placeholder="0"
                 value={form.facings}
                 onChange={(e) => set("facings", e.target.value)}
               />
             </div>
-            <div className="flex items-end gap-4">
-              <label className="flex items-center gap-2 text-sm text-slate-600">
+
+            {/* 8. Options Checkbox */}
+            <div className="flex items-end gap-4 h-[42px] mb-1">
+              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
                 <input
+                  title="Produit en promotion"
                   type="checkbox"
                   checked={form.promo}
                   onChange={(e) => set("promo", e.target.checked)}
                 />
                 Promotion
               </label>
-              <label className="flex items-center gap-2 text-sm text-slate-600">
+              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
                 <input
+                  title="Produit disponible en rayon"
                   type="checkbox"
                   checked={form.available}
                   onChange={(e) => set("available", e.target.checked)}
@@ -243,14 +278,16 @@ export default function AuditPrixPage() {
               </label>
             </div>
           </div>
+
           <div>
-            <label className="label">Photo</label>
+            <span className="label block mb-1">Photo</span>
             <PhotoInput
               value={form.photo}
               onChange={(v) => set("photo", v)}
               label="Photo du rayon / prix"
             />
           </div>
+
           <div className="flex justify-end gap-3">
             <button className="btn-secondary" onClick={() => setOpen(false)}>
               Annuler
@@ -268,28 +305,32 @@ export default function AuditPrixPage() {
             Indice de prix par marque
           </h3>
           <div className="space-y-3">
-            {brands.map((b) => (
-              <div key={b.brand} className="flex items-center gap-3">
-                <span className="w-32 truncate text-sm text-slate-600">
-                  {b.brand}
-                </span>
-                <div className="h-2.5 flex-1 rounded-full bg-slate-100">
-                  <div
-                    className={cn(
-                      "h-2.5 rounded-full",
-                      b.isOwn ? "bg-brand-600" : "bg-slate-400",
-                    )}
-                    style={{ width: `${Math.min(100, b.index / 1.5)}%` }}
-                  />
+            {brands.map((b) => {
+              const widthPct = `${Math.min(100, b.index / 1.5)}%`;
+              return (
+                <div key={b.brand} className="flex items-center gap-3">
+                  <span className="w-32 truncate text-sm text-slate-600">
+                    {b.brand}
+                  </span>
+                  <div className="h-2.5 flex-1 rounded-full bg-slate-100">
+                    {/* Correction : Remplacement des styles arbitraires en ligne par des variables CSS pour Tailwind */}
+                    <div
+                      className={cn(
+                        "h-2.5 rounded-full transition-all duration-500",
+                        b.isOwn ? "bg-brand-600" : "bg-slate-400",
+                      )}
+                      style={{ width: widthPct }}
+                    />
+                  </div>
+                  <span className="w-24 text-right text-xs text-slate-500">
+                    {formatFCFA(b.avgPrice)}
+                  </span>
+                  <span className="w-10 text-right text-xs font-semibold text-slate-700">
+                    {Math.round(b.index)}
+                  </span>
                 </div>
-                <span className="w-24 text-right text-xs text-slate-500">
-                  {formatFCFA(b.avgPrice)}
-                </span>
-                <span className="w-10 text-right text-xs font-semibold text-slate-700">
-                  {Math.round(b.index)}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
 
