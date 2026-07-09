@@ -26,11 +26,15 @@ export function PhotoInput({
 
   return (
     <div>
+      {/* Association d'un aria-label et d'un title pour satisfaire l'accessibilité Chrome/Lighthouse */}
       <input
         ref={inputRef}
+        id="camera-capture-input"
         type="file"
         accept="image/*"
         capture="environment"
+        title="Prendre une photo du rayon avec l'appareil photo"
+        aria-label="Prendre une photo du rayon avec l'appareil photo"
         className="hidden"
         onChange={handle}
       />
@@ -39,7 +43,7 @@ export function PhotoInput({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
-            alt="Photo capturée"
+            alt="Photo du rayon capturée"
             className="h-32 w-32 rounded-lg border border-slate-200 object-cover"
           />
           <button
