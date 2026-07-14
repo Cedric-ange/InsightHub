@@ -48,15 +48,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!user || !ready) return;
     refreshPending();
-    if (user.role !== "FIELD_AGENT") {
-      pullStudiesFromCloud();
-    }
+    // Le catalogue de questionnaires vient toujours du backend (source de
+    // vérité) et est mis en cache localement pour la collecte hors-ligne.
+    pullStudiesFromCloud();
 
     const interval = setInterval(async () => {
-      await flush(user.role);
-      if (user.role !== "FIELD_AGENT") {
-        await pullStudiesFromCloud();
-      }
+      await flush();
+      await pullStudiesFromCloud();
     }, 30000);
 
     return () => clearInterval(interval);

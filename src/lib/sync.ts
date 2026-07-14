@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { getDB } from "./db";
-import type { MerchAudit, PriceAudit, Submission } from "./types";
+import type { MerchAudit, PriceAudit, Study, Submission } from "./types";
 
 // Envoi d'un lot d'enregistrements locaux vers la route d'API backend
 async function pushBatch<T extends { id: string }>(
@@ -95,8 +95,8 @@ interface SyncState {
   pending: PendingCounts;
   setOnline: (v: boolean) => void;
   refreshPending: () => Promise<void>;
-  pullStudiesFromCloud: () => Promise<void>; // ⚡ NOUVEAUTÉ : Récupération forcée de Supabase
-  flush: (userRole?: string) => Promise<void>;
+  pullStudiesFromCloud: () => Promise<void>;
+  flush: () => Promise<void>;
 }
 
 export const useSync = create<SyncState>((set, get) => ({
@@ -124,31 +124,31 @@ export const useSync = create<SyncState>((set, get) => ({
     });
   },
 
-// ⚡ RÉCUPÉRATION DIRECTE DE TES QUESTIONNAIRES DEPUIS SUPABASE CLOUD
+  // Récupération du catalogue de questionnaires depuis le backend (source de
+  // vérité) puis mise en cache locale IndexedDB pour l'usage hors-ligne.
   pullStudiesFromCloud: async () => {
     if (!get().online) return;
     try {
-      const response = await fetch(`/api/seed?_t=${Date.now()}`); 
-      if (response.ok) {
-        console.log("Catalogue mis à jour avec succès depuis Supabase.");
-        // 🚫 SUPPRESSION DU window.location.reload() QUI COUPE LA SESSION
+      const response = await fetch(`/api/studies?all=1&_t=${Date.now()}`);
+      if (!response.ok) return;
+      const json = await response.json();
+      const studies = (json.data ?? []) as Study[];
+      if (studies.length) {
+        const db = getDB();
+        await db.studies.bulkPut(studies);
       }
     } catch (e) {
-      console.error("Impossible de rafraîchir le catalogue cloud", e);
+      console.error("Impossible de rafraîchir le catalogue depuis le backend", e);
     }
   },
 
-  flush: async (userRole?: string) => {
+  flush: async () => {
     if (get().syncing || !get().online) return;
     set({ syncing: true });
     const db = getDB();
     try {
-      // Si l'utilisateur connecté n'est PAS un agent de test terrain (FIELD_AGENT),
-      // on peut bloquer l'envoi de lignes mockées locales non sollicitées
-      const isTestUser = userRole === "FIELD_AGENT";
-
       const subs = await db.submissions.where("syncStatus").equals("pending").toArray();
-      if (subs.length && (isTestUser || subs[0].agentId !== "agent_terrain_02")) {
+      if (subs.length) {
         await pushBatch("submissions", subs, submissionRow);
         await db.submissions.bulkUpdate(
           subs.map((s) => ({ key: s.id, changes: { syncStatus: "synced" } })),

@@ -13,7 +13,6 @@ import {
 import { getDB } from "@/lib/db";
 import { useAuth } from "@/lib/auth";
 import { uid } from "@/lib/utils";
-import { getSupabase } from "@/lib/supabase"; // Importation du client cloud
 import {
   QUESTION_TYPE_LABELS,
   SIXP_LABELS,
@@ -98,28 +97,20 @@ export function StudyBuilder({ initial }: { initial?: Study }) {
     };
 
     try {
-      // 1. Sauvegarde locale persistante (Offline-first)
+      // 1. Sauvegarde locale persistante (offline-first, cache immédiat).
       await getDB().studies.put(study);
 
-      // 2. Envoi direct et simultané dans le cloud Supabase
-      const supabase = getSupabase();
-      if (supabase) {
-        const { error: supabaseError } = await supabase
-          .from("studies")
-          .upsert({
-            id: study.id,
-            title: study.title,
-            description: study.description ?? null,
-            category: study.category,
-            status: study.status,
-            questions: study.questions, // Sérialisé automatiquement en JSONB
-            created_by: study.createdBy,
-            created_at: study.createdAt,
-            updated_at: study.updatedAt
-          }, { onConflict: "id" });
-
-        if (supabaseError) {
-          console.warn("Échec synchro cloud directe, conservé en local :", supabaseError.message);
+      // 2. Persistance backend (source de vérité). En cas d'échec réseau, la
+      // version locale est conservée et resynchronisée au prochain passage en ligne.
+      if (navigator.onLine) {
+        const res = await fetch("/api/studies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(study),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Échec de l'enregistrement serveur");
         }
       }
 

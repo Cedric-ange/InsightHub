@@ -1,52 +1,65 @@
 import { NextResponse } from "next/server";
-import postgres from "postgres";
+import { getSql } from "@/lib/pg";
 
 export const dynamic = "force-dynamic";
 
+type Row = Record<string, unknown>;
+
+// UPSERT idempotent (par id) des enregistrements collectés hors-ligne.
+// Le corps reçu est { table, records } où records est déjà en snake_case
+// (voir src/lib/sync.ts). Les colonnes jsonb sont sérialisées explicitement.
 export async function POST(request: Request) {
   try {
-    const { submissions, priceAudits, merchAudits } = await request.json();
+    const { table, records } = (await request.json()) as {
+      table: string;
+      records: Row[];
+    };
 
-    const sql = postgres("postgresql://postgres.jiksjctyvivyvmscryrt:AngeToure1234@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require");
+    if (!Array.isArray(records) || records.length === 0) {
+      return NextResponse.json({ success: true, count: 0 });
+    }
 
-    // 1. Sauvegarde des soumissions (submissions)
-    if (submissions && submissions.length > 0) {
-      for (const s of submissions) {
+    const sql = getSql();
+
+    if (table === "submissions") {
+      for (const r of records) {
         await sql`
           INSERT INTO submissions (id, study_id, study_title, agent_id, agent_name, answers, geo, started_at, finished_at, duration_sec, validation, created_at)
-          VALUES (${s.id}, ${s.studyId}, ${s.studyTitle}, ${s.agentId}, ${s.agentName}, ${sql.json(s.answers)}, ${sql.json(s.geo || null)}, ${s.startedAt || null}, ${s.finishedAt || null}, ${s.durationSec || 0}, ${s.validation || "pending"}, NOW())
-          ON CONFLICT (id) DO NOTHING
+          VALUES (${r.id as string}, ${r.study_id as string}, ${(r.study_title as string) ?? null}, ${(r.agent_id as string) ?? null}, ${(r.agent_name as string) ?? null}, ${sql.json((r.answers ?? []) as never)}, ${sql.json((r.geo ?? null) as never)}, ${(r.started_at as number) ?? null}, ${(r.finished_at as number) ?? null}, ${(r.duration_sec as number) ?? null}, ${(r.validation as string) ?? "submitted"}, ${(r.created_at as number) ?? null})
+          ON CONFLICT (id) DO UPDATE SET
+            answers = excluded.answers, geo = excluded.geo,
+            validation = excluded.validation, study_title = excluded.study_title
         `;
       }
-    }
-
-    // 2. Sauvegarde des audits de prix
-    if (priceAudits && priceAudits.length > 0) {
-      for (const p of priceAudits) {
+    } else if (table === "price_audits") {
+      for (const r of records) {
         await sql`
           INSERT INTO price_audits (id, outlet, channel, brand, is_own_brand, product, price, promo, available, facings, region, geo, agent_id, agent_name, created_at)
-          VALUES (${p.id}, ${p.outlet}, ${p.channel}, ${p.brand}, ${p.isOwnBrand}, ${p.product}, ${p.price}, ${p.promo}, ${p.available}, ${p.facings || null}, ${p.region}, ${sql.json(p.geo || null)}, ${p.agentId}, ${p.agentName}, NOW())
-          ON CONFLICT (id) DO NOTHING
+          VALUES (${r.id as string}, ${(r.outlet as string) ?? null}, ${(r.channel as string) ?? null}, ${(r.brand as string) ?? null}, ${(r.is_own_brand as boolean) ?? null}, ${(r.product as string) ?? null}, ${(r.price as number) ?? null}, ${(r.promo as boolean) ?? null}, ${(r.available as boolean) ?? null}, ${(r.facings as number) ?? null}, ${(r.region as string) ?? null}, ${sql.json((r.geo ?? null) as never)}, ${(r.agent_id as string) ?? null}, ${(r.agent_name as string) ?? null}, ${(r.created_at as number) ?? null})
+          ON CONFLICT (id) DO UPDATE SET
+            price = excluded.price, promo = excluded.promo, available = excluded.available, facings = excluded.facings
         `;
       }
-    }
-
-    // 3. Sauvegarde des audits merchandising
-    if (merchAudits && merchAudits.length > 0) {
-      for (const m of merchAudits) {
+    } else if (table === "merch_audits") {
+      for (const r of records) {
         await sql`
           INSERT INTO merch_audits (id, outlet, channel, brand, is_own_brand, facings, shelf_length_cm, shelf_position, out_of_stock, plv_present, activation_present, region, geo, agent_id, agent_name, created_at)
-          VALUES (${m.id}, ${m.outlet}, ${m.channel}, ${m.brand}, ${m.isOwnBrand}, ${m.facings || null}, ${m.shelfLengthCm || null}, ${m.shelfPosition || null}, ${m.outOfStock}, ${m.plvPresent}, ${m.activationPresent}, ${m.region}, ${sql.json(m.geo || null)}, ${m.agentId}, ${m.agentName}, NOW())
-          ON CONFLICT (id) DO NOTHING
+          VALUES (${r.id as string}, ${(r.outlet as string) ?? null}, ${(r.channel as string) ?? null}, ${(r.brand as string) ?? null}, ${(r.is_own_brand as boolean) ?? null}, ${(r.facings as number) ?? null}, ${(r.shelf_length_cm as number) ?? null}, ${(r.shelf_position as string) ?? null}, ${(r.out_of_stock as boolean) ?? null}, ${(r.plv_present as boolean) ?? null}, ${(r.activation_present as boolean) ?? null}, ${(r.region as string) ?? null}, ${sql.json((r.geo ?? null) as never)}, ${(r.agent_id as string) ?? null}, ${(r.agent_name as string) ?? null}, ${(r.created_at as number) ?? null})
+          ON CONFLICT (id) DO UPDATE SET
+            facings = excluded.facings, out_of_stock = excluded.out_of_stock, plv_present = excluded.plv_present, activation_present = excluded.activation_present
         `;
       }
+    } else {
+      return NextResponse.json(
+        { success: false, error: `Table non autorisée: ${table}` },
+        { status: 400 },
+      );
     }
 
-    return NextResponse.json({ success: true, message: "Synchronisation réussie." });
-
+    return NextResponse.json({ success: true, count: records.length });
   } catch (error: unknown) {
-    console.error("Erreur critique de synchronisation:", error);
     const msg = error instanceof Error ? error.message : "Erreur lors de la synchronisation";
+    console.error("POST /api/sync:", msg);
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

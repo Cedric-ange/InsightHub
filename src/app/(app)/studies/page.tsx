@@ -31,6 +31,11 @@ export default function StudiesPage() {
   const remove = async (id: string) => {
     if (confirm("Supprimer définitivement cette étude ?")) {
       await getDB().studies.delete(id);
+      if (navigator.onLine) {
+        await fetch(`/api/studies?id=${encodeURIComponent(id)}`, {
+          method: "DELETE",
+        }).catch(() => undefined);
+      }
     }
   };
 

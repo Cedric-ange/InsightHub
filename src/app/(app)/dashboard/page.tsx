@@ -22,9 +22,8 @@ export default function DashboardPage() {
   // ⚡ Typage strict de l'état Cloud avec tes interfaces réelles au lieu de any[]
   const [cloudData, setCloudData] = useState<{ submissions: Submission[]; price: PriceAudit[]; merch: MerchAudit[] } | null>(null);
 
-  // 1. Stratégie Locale (Uniquement pour le compte FIELD_AGENT / Test)
+  // Cache local (IndexedDB) — utilisé en secours hors-ligne pour tous les rôles.
   const localData = useLiveQuery(async () => {
-    if (user?.role !== "FIELD_AGENT") return null;
     const db = getDB();
     const [submissions, price, merch] = await Promise.all([
       db.submissions.toArray(),
@@ -32,13 +31,14 @@ export default function DashboardPage() {
       db.merchAudits.toArray(),
     ]);
     return { submissions, price, merch };
-  }, [user]);
+  }, []);
 
-  // 2. Stratégie Cloud Supabase (Pour l'administrateur et les profils managériaux)
+  // Source de vérité : le backend Supabase. Toutes les données du dashboard
+  // proviennent des tables serveur dès que la connexion est disponible.
   useEffect(() => {
-    if (!user || user.role === "FIELD_AGENT") return;
+    if (!user) return;
 
-    async function fetchSupabaseData() {
+    async function fetchBackendData() {
       try {
         const [resSubs, resPrice, resMerch] = await Promise.all([
           fetch("/api/submissions"),
@@ -58,18 +58,19 @@ export default function DashboardPage() {
           merch: merchJson.data || [],
         });
       } catch (err) {
-        console.error("Erreur lors du chargement des tables Supabase :", err);
+        console.error("Erreur lors du chargement des données backend :", err);
+        setCloudData(null);
       }
     }
 
-    fetchSupabaseData();
+    fetchBackendData();
   }, [user]);
 
-  // Sélection de la source d'approvisionnement en données
-  const activeData = user?.role === "FIELD_AGENT" ? localData : cloudData;
+  // Backend prioritaire ; repli sur le cache local si le serveur est injoignable.
+  const activeData = cloudData ?? localData;
 
   if (!activeData) {
-    return <p className="text-slate-400 p-6">Chargement des indicateurs analytiques depuis Supabase...</p>;
+    return <p className="text-slate-400 p-6">Chargement des indicateurs analytiques depuis le backend…</p>;
   }
 
   // ⚡ Remplacement des signatures (p: any) et (m: any) par leurs vrais types structurels
