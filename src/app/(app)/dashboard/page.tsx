@@ -41,9 +41,9 @@ export default function DashboardPage() {
     async function fetchBackendData() {
       try {
         const [resSubs, resPrice, resMerch] = await Promise.all([
-          fetch("/api/submissions"),
-          fetch("/api/price-audits"),
-          fetch("/api/merch-audits"),
+          fetch("/api/submissions", { cache: "no-store" }),
+          fetch("/api/price-audits", { cache: "no-store" }),
+          fetch("/api/merch-audits", { cache: "no-store" }),
         ]);
 
         const [subsJson, priceJson, merchJson] = await Promise.all([

@@ -3,7 +3,7 @@
  * and replayed by the sync engine when connectivity returns. This SW only caches
  * the application shell so the PWA opens and works without a network connection.
  */
-const CACHE_VERSION = "insighthub-v1";
+const CACHE_VERSION = "insighthub-v2";
 const APP_SHELL = [
   "/",
   "/dashboard",
@@ -44,6 +44,9 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  // Never cache API calls — les données doivent toujours venir du backend.
+  if (url.pathname.startsWith("/api/")) return;
 
   // Network-first for navigations, falling back to cache when offline.
   if (request.mode === "navigate") {

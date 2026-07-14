@@ -133,10 +133,13 @@ export const useSync = create<SyncState>((set, get) => ({
       if (!response.ok) return;
       const json = await response.json();
       const studies = (json.data ?? []) as Study[];
-      if (studies.length) {
-        const db = getDB();
-        await db.studies.bulkPut(studies);
-      }
+      // Le backend est la source de vérité : on réaligne le cache local dessus
+      // (suppression des études obsolètes, plus aucune donnée mockée locale).
+      const db = getDB();
+      await db.transaction("rw", db.studies, async () => {
+        await db.studies.clear();
+        if (studies.length) await db.studies.bulkPut(studies);
+      });
     } catch (e) {
       console.error("Impossible de rafraîchir le catalogue depuis le backend", e);
     }
