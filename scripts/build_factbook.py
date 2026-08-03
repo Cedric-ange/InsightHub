@@ -15,7 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "data" / "FACTBOOK_FMCG_2026.xlsx"
+SOURCE = ROOT / "cia-facbook-pwa" / "FACTBOOK_FMCG_2026_TOTALEMENT_A_JOUR.xlsx"
 TARGET = ROOT / "src" / "data" / "factbook.json"
 
 # Codes ISO3 des pays couverts par le factbook (clé de jointure avec la carte).

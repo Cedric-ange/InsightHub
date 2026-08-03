@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   RefreshCw,
   Users,
+  Globe2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -28,4 +29,5 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/validation", label: "Validation", icon: CheckCircle2, area: "validation" },
   { href: "/sync", label: "Synchronisation", icon: RefreshCw, area: "" },
   { href: "/admin", label: "Administration", icon: Users, area: "admin" },
+  { href: "/factbook", label: "Factbook FMCG", icon: Globe2, area: "factbook" },
 ];

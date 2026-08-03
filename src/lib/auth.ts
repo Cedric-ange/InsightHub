@@ -103,6 +103,7 @@ export const ROLE_ACCESS: Record<string, Role[]> = {
   "audit-prix": ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER","BRAND_MANAGER"],
   merchandising: ["ADMIN", "SUPERVISOR", "FIELD_AGENT","MANAGER","BRAND_MANAGER"],
   analytics: ["ADMIN", "MANAGER", "BRAND_MANAGER"],
+  factbook: ["ADMIN", "MANAGER", "BRAND_MANAGER", "SUPERVISOR"],
   validation: ["ADMIN", "MANAGER", "SUPERVISOR","BRAND_MANAGER"],
   admin: ["ADMIN"],
 };
