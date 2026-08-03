@@ -1,6 +1,8 @@
 [
     {
         "Country":"Nigeria",
+        "Main_Cluster":"NG",
+        "Sub_Cluster":"NG",
         "Area (land): sq km":910768,
         "Population (2025 est.)":244344065.0,
         "Population growth rate (2025 est.)":0.0239,
@@ -36,6 +38,8 @@
     },
     {
         "Country":"I. Coast",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":318003,
         "Population (2025 est.)":31855971.0,
         "Population growth rate (2025 est.)":0.0233,
@@ -71,6 +75,8 @@
     },
     {
         "Country":"Senegal",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":192530,
         "Population (2025 est.)":18847519.0,
         "Population growth rate (2025 est.)":0.024,
@@ -106,6 +112,8 @@
     },
     {
         "Country":"Gambia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":10120,
         "Population (2025 est.)":2523327.0,
         "Population growth rate (2025 est.)":0.0209,
@@ -141,6 +149,8 @@
     },
     {
         "Country":"Guinea Bissau",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":28120,
         "Population (2025 est.)":2132325.0,
         "Population growth rate (2025 est.)":0.0255,
@@ -176,6 +186,8 @@
     },
     {
         "Country":"Sierra Leone",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":71620,
         "Population (2025 est.)":9331203.0,
         "Population growth rate (2025 est.)":0.0224,
@@ -211,6 +223,8 @@
     },
     {
         "Country":"Liberia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":96320,
         "Population (2025 est.)":5563541.0,
         "Population growth rate (2025 est.)":0.0227,
@@ -246,6 +260,8 @@
     },
     {
         "Country":"Guinea Conakry",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":245717,
         "Population (2025 est.)":14374590.0,
         "Population growth rate (2025 est.)":0.0274,
@@ -281,6 +297,8 @@
     },
     {
         "Country":"Burkina Faso",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":273800,
         "Population (2025 est.)":23490300.0,
         "Population growth rate (2025 est.)":0.0239,
@@ -316,6 +334,8 @@
     },
     {
         "Country":"Mali",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":1220190,
         "Population (2025 est.)":22634423.0,
         "Population growth rate (2025 est.)":0.0288,
@@ -351,6 +371,8 @@
     },
     {
         "Country":"Niger",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":"1,266,700 ",
         "Population (2025 est.)":27322555.0,
         "Population growth rate (2025 est.)":0.0365,
@@ -386,6 +408,8 @@
     },
     {
         "Country":"Chad",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":1259200,
         "Population (2025 est.)":19674004.0,
         "Population growth rate (2025 est.)":0.0298,
@@ -421,6 +445,8 @@
     },
     {
         "Country":"Cape Verde",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":4033,
         "Population (2025 est.)":611014.0,
         "Population growth rate (2025 est.)":0.0112,
@@ -456,6 +482,8 @@
     },
     {
         "Country":"Togo",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":54385,
         "Population (2025 est.)":9143439.0,
         "Population growth rate (2025 est.)":0.0237,
@@ -491,6 +519,8 @@
     },
     {
         "Country":"Benin",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":"110,622 ",
         "Population (2025 est.)":15186090.0,
         "Population growth rate (2025 est.)":0.0326,
@@ -526,6 +556,8 @@
     },
     {
         "Country":"Cameroon",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":472710,
         "Population (2025 est.)":31518954.0,
         "Population growth rate (2025 est.)":0.0237,
@@ -561,6 +593,8 @@
     },
     {
         "Country":"Gabon",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":257667,
         "Population (2025 est.)":2513738.0,
         "Population growth rate (2025 est.)":0.0235,
@@ -596,6 +630,8 @@
     },
     {
         "Country":"Congo Brazzaville",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":341500,
         "Population (2025 est.)":6097665.0,
         "Population growth rate (2025 est.)":0.0236,
@@ -631,6 +667,8 @@
     },
     {
         "Country":"Central Africa R.",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":622984,
         "Population (2025 est.)":5750570.0,
         "Population growth rate (2025 est.)":0.0174,
@@ -666,6 +704,8 @@
     },
     {
         "Country":"Ghana",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"WA",
         "Area (land): sq km":227533,
         "Population (2025 est.)":35336133.0,
         "Population growth rate (2025 est.)":0.0212,
@@ -701,6 +741,8 @@
     },
     {
         "Country":"Namibia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":823290,
         "Population (2025 est.)":2852777.0,
         "Population growth rate (2025 est.)":0.0176,
@@ -736,6 +778,8 @@
     },
     {
         "Country":"Mozzambique",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":786380,
         "Population (2025 est.)":34206144.0,
         "Population growth rate (2025 est.)":0.0253,
@@ -771,6 +815,8 @@
     },
     {
         "Country":"Madagascar",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":"581,540 ",
         "Population (2025 est.)":31345040.0,
         "Population growth rate (2025 est.)":0.0215,
@@ -806,6 +852,8 @@
     },
     {
         "Country":"Equatorial Guinea",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":28051,
         "Population (2025 est.)":1795834.0,
         "Population growth rate (2025 est.)":0.031,
@@ -841,6 +889,8 @@
     },
     {
         "Country":"Sao Tome & Principe",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":964,
         "Population (2025 est.)":223561.0,
         "Population growth rate (2025 est.)":0.0139,
@@ -876,6 +926,8 @@
     },
     {
         "Country":"DRC",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":2267048,
         "Population (2025 est.)":119038825.0,
         "Population growth rate (2025 est.)":0.0309,
@@ -911,6 +963,8 @@
     },
     {
         "Country":"Angola",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":1246700,
         "Population (2025 est.)":38984796.0,
         "Population growth rate (2025 est.)":0.0332,
@@ -946,6 +1000,8 @@
     },
     {
         "Country":"South Sudan",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":null,
         "Population (2025 est.)":12703714.0,
         "Population growth rate (2025 est.)":0.0452,
@@ -981,6 +1037,8 @@
     },
     {
         "Country":"Ethiopia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":"1,096,570 ",
         "Population (2025 est.)":121372632.0,
         "Population growth rate (2025 est.)":0.0234,
@@ -1016,6 +1074,8 @@
     },
     {
         "Country":"Eritrea",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":101000,
         "Population (2025 est.)":6416435.0,
         "Population growth rate (2025 est.)":0.0116,
@@ -1051,6 +1111,8 @@
     },
     {
         "Country":"Djibouti",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":23180,
         "Population (2025 est.)":1013703.0,
         "Population growth rate (2025 est.)":0.0184,
@@ -1086,6 +1148,8 @@
     },
     {
         "Country":"Somalia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":627337,
         "Population (2025 est.)":20324160.0,
         "Population growth rate (2025 est.)":0.0332,
@@ -1121,6 +1185,8 @@
     },
     {
         "Country":"Kenya",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":569140,
         "Population (2025 est.)":55751717.0,
         "Population growth rate (2025 est.)":0.0215,
@@ -1156,6 +1222,8 @@
     },
     {
         "Country":"Uganda",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":"197,100 ",
         "Population (2025 est.)":50863850.0,
         "Population growth rate (2025 est.)":0.0313,
@@ -1191,6 +1259,8 @@
     },
     {
         "Country":"Tanzania",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":885800,
         "Population (2025 est.)":69145464.0,
         "Population growth rate (2025 est.)":0.0285,
@@ -1226,6 +1296,8 @@
     },
     {
         "Country":"Rwanda",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":24668,
         "Population (2025 est.)":13623302.0,
         "Population growth rate (2025 est.)":0.02,
@@ -1261,6 +1333,8 @@
     },
     {
         "Country":"Burundi",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":25680,
         "Population (2025 est.)":13590102.0,
         "Population growth rate (2025 est.)":0.0296,
@@ -1296,6 +1370,8 @@
     },
     {
         "Country":"Malawi",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":"94,080 ",
         "Population (2025 est.)":21763309.0,
         "Population growth rate (2025 est.)":0.0216,
@@ -1331,6 +1407,8 @@
     },
     {
         "Country":"Zambia",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":743398,
         "Population (2025 est.)":22021971.0,
         "Population growth rate (2025 est.)":0.0251,
@@ -1366,6 +1444,8 @@
     },
     {
         "Country":"Zimbabwe",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":386847,
         "Population (2025 est.)":17472752.0,
         "Population growth rate (2025 est.)":0.0182,
@@ -1401,6 +1481,8 @@
     },
     {
         "Country":"South Africa",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":1214470,
         "Population (2025 est.)":61089926.0,
         "Population growth rate (2025 est.)":0.0106,
@@ -1436,6 +1518,8 @@
     },
     {
         "Country":"Botswana",
+        "Main_Cluster":"RoSSA",
+        "Sub_Cluster":"EESA",
         "Area (land): sq km":566730,
         "Population (2025 est.)":2521534.0,
         "Population growth rate (2025 est.)":0.0132,
@@ -1471,6 +1555,8 @@
     },
     {
         "Country":"India Ocean",
+        "Main_Cluster":null,
+        "Sub_Cluster":null,
         "Area (land): sq km":null,
         "Population (2025 est.)":null,
         "Population growth rate (2025 est.)":null,
@@ -1506,6 +1592,8 @@
     },
     {
         "Country":"Islands",
+        "Main_Cluster":null,
+        "Sub_Cluster":null,
         "Area (land): sq km":100250,
         "Population (2025 est.)":354234.0,
         "Population growth rate (2025 est.)":0.0097,

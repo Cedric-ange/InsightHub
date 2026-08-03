@@ -1,6 +1,8 @@
 [
   {
     "iso3": "AGO",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Angola",
     "areaKm2": 1246700.0,
     "population": 38984796.0,
@@ -32,10 +34,14 @@
     "tvStations": 3.0,
     "urbanPopulation": 26782555.0,
     "population0_14": 18283869.0,
-    "populationBelowPoverty": 10866574.66
+    "populationBelowPoverty": 10866574.66,
+    "gdpUsdBn": 80.397,
+    "gdpPerCapitaUsd": 7300.0
   },
   {
     "iso3": "BEN",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Benin",
     "areaKm2": 110622.0,
     "population": 15186090.0,
@@ -67,10 +73,14 @@
     "tvStations": null,
     "urbanPopulation": 7608231.0,
     "population0_14": 6879299.0,
-    "populationBelowPoverty": 5846644.65
+    "populationBelowPoverty": 5846644.65,
+    "gdpUsdBn": 21.483,
+    "gdpPerCapitaUsd": 3900.0
   },
   {
     "iso3": "BWA",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Botswana",
     "areaKm2": 566730.0,
     "population": 2521534.0,
@@ -102,10 +112,14 @@
     "tvStations": 2.0,
     "urbanPopulation": 1838198.0,
     "population0_14": 723680.0,
-    "populationBelowPoverty": 405966.97
+    "populationBelowPoverty": 405966.97,
+    "gdpUsdBn": 19.401,
+    "gdpPerCapitaUsd": 18100.0
   },
   {
     "iso3": "BFA",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Burkina Faso",
     "areaKm2": 273800.0,
     "population": 23490300.0,
@@ -137,10 +151,14 @@
     "tvStations": 14.0,
     "urbanPopulation": 7634348.0,
     "population0_14": 9771965.0,
-    "populationBelowPoverty": 10147809.6
+    "populationBelowPoverty": 10147809.6,
+    "gdpUsdBn": 23.25,
+    "gdpPerCapitaUsd": 2500.0
   },
   {
     "iso3": "BDI",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Burundi",
     "areaKm2": 25680.0,
     "population": 13590102.0,
@@ -172,10 +190,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 2011335.0,
     "population0_14": 5748613.0,
-    "populationBelowPoverty": 6930952.02
+    "populationBelowPoverty": 6930952.02,
+    "gdpUsdBn": 2.162,
+    "gdpPerCapitaUsd": 800.0
   },
   {
     "iso3": "CMR",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Cameroon",
     "areaKm2": 472710.0,
     "population": 31518954.0,
@@ -207,10 +229,14 @@
     "tvStations": 3.0,
     "urbanPopulation": 18690740.0,
     "population0_14": 13080366.0,
-    "populationBelowPoverty": 11819607.75
+    "populationBelowPoverty": 11819607.75,
+    "gdpUsdBn": 51.327,
+    "gdpPerCapitaUsd": 4900.0
   },
   {
     "iso3": "CPV",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Cape Verde",
     "areaKm2": 4033.0,
     "population": 611014.0,
@@ -242,10 +268,14 @@
     "tvStations": null,
     "urbanPopulation": 415490.0,
     "population0_14": 161308.0,
-    "populationBelowPoverty": 215076.93
+    "populationBelowPoverty": 215076.93,
+    "gdpUsdBn": 2.768,
+    "gdpPerCapitaUsd": 9900.0
   },
   {
     "iso3": "CAF",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Central Africa R.",
     "areaKm2": 622984.0,
     "population": 5750570.0,
@@ -277,10 +307,14 @@
     "tvStations": 2.0,
     "urbanPopulation": 2507249.0,
     "population0_14": 2213969.0,
-    "populationBelowPoverty": 2143193.6
+    "populationBelowPoverty": 2143193.6,
+    "gdpUsdBn": 2.752,
+    "gdpPerCapitaUsd": 1100.0
   },
   {
     "iso3": "TCD",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Chad",
     "areaKm2": 1259200.0,
     "population": 19674004.0,
@@ -312,10 +346,14 @@
     "tvStations": 3.0,
     "urbanPopulation": 4800457.0,
     "population0_14": 9010694.0,
-    "populationBelowPoverty": 8813953.79
+    "populationBelowPoverty": 8813953.79,
+    "gdpUsdBn": 20.626,
+    "gdpPerCapitaUsd": 2600.0
   },
   {
     "iso3": "COG",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Congo Brazzaville",
     "areaKm2": 341500.0,
     "population": 6097665.0,
@@ -347,10 +385,14 @@
     "tvStations": null,
     "urbanPopulation": 4219584.0,
     "population0_14": 2304917.0,
-    "populationBelowPoverty": 2215722.33
+    "populationBelowPoverty": 2215722.33,
+    "gdpUsdBn": 15.72,
+    "gdpPerCapitaUsd": 6200.0
   },
   {
     "iso3": "COD",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "DRC",
     "areaKm2": 2267048.0,
     "population": 119038825.0,
@@ -382,10 +424,14 @@
     "tvStations": 5.0,
     "urbanPopulation": 56424403.0,
     "population0_14": 54400743.0,
-    "populationBelowPoverty": 66178126.98
+    "populationBelowPoverty": 66178126.98,
+    "gdpUsdBn": 70.749,
+    "gdpPerCapitaUsd": 1500.0
   },
   {
     "iso3": "DJI",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Djibouti",
     "areaKm2": 23180.0,
     "population": 1013703.0,
@@ -417,10 +463,14 @@
     "tvStations": 1.0,
     "urbanPopulation": 796771.0,
     "population0_14": 287892.0,
-    "populationBelowPoverty": 213891.33
+    "populationBelowPoverty": 213891.33,
+    "gdpUsdBn": 4.086,
+    "gdpPerCapitaUsd": 6800.0
   },
   {
     "iso3": "GNQ",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Equatorial Guinea",
     "areaKm2": 28051.0,
     "population": 1795834.0,
@@ -452,10 +502,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 1336100.0,
     "population0_14": 639317.0,
-    "populationBelowPoverty": 377083.52
+    "populationBelowPoverty": 377083.52,
+    "gdpUsdBn": 12.766,
+    "gdpPerCapitaUsd": 15500.0
   },
   {
     "iso3": "ERI",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Eritrea",
     "areaKm2": 101000.0,
     "population": 6416435.0,
@@ -487,10 +541,14 @@
     "tvStations": 3.0,
     "urbanPopulation": 2778316.0,
     "population0_14": 2290667.0,
-    "populationBelowPoverty": 3208217.5
+    "populationBelowPoverty": 3208217.5,
+    "gdpUsdBn": 2.535,
+    "gdpPerCapitaUsd": 700.0
   },
   {
     "iso3": "ETH",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Ethiopia",
     "areaKm2": 1096570.0,
     "population": 121372632.0,
@@ -522,10 +580,14 @@
     "tvStations": 6.0,
     "urbanPopulation": 28158451.0,
     "population0_14": 46971209.0,
-    "populationBelowPoverty": 26054692.29
+    "populationBelowPoverty": 26054692.29,
+    "gdpUsdBn": 126.773,
+    "gdpPerCapitaUsd": 2900.0
   },
   {
     "iso3": "GAB",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Gabon",
     "areaKm2": 257667.0,
     "population": 2513738.0,
@@ -557,10 +619,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 2287502.0,
     "population0_14": 869753.0,
-    "populationBelowPoverty": 763160.61
+    "populationBelowPoverty": 763160.61,
+    "gdpUsdBn": 20.867,
+    "gdpPerCapitaUsd": 18900.0
   },
   {
     "iso3": "GMB",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Gambia",
     "areaKm2": 10120.0,
     "population": 2523327.0,
@@ -592,10 +658,14 @@
     "tvStations": 5.0,
     "urbanPopulation": 1627546.0,
     "population0_14": 963911.0,
-    "populationBelowPoverty": 1347456.62
+    "populationBelowPoverty": 1347456.62,
+    "gdpUsdBn": 2.508,
+    "gdpPerCapitaUsd": 3000.0
   },
   {
     "iso3": "GHA",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Ghana",
     "areaKm2": 227533.0,
     "population": 35336133.0,
@@ -627,10 +697,14 @@
     "tvStations": 7.0,
     "urbanPopulation": 20918991.0,
     "population0_14": 13215714.0,
-    "populationBelowPoverty": 7575256.03
+    "populationBelowPoverty": 7575256.03,
+    "gdpUsdBn": 82.825,
+    "gdpPerCapitaUsd": 7100.0
   },
   {
     "iso3": "GNB",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Guinea Bissau",
     "areaKm2": 28120.0,
     "population": 2132325.0,
@@ -662,10 +736,14 @@
     "tvStations": 2.0,
     "urbanPopulation": 970208.0,
     "population0_14": 901973.0,
-    "populationBelowPoverty": 1076824.12
+    "populationBelowPoverty": 1076824.12,
+    "gdpUsdBn": 2.12,
+    "gdpPerCapitaUsd": 2700.0
   },
   {
     "iso3": "GIN",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Guinea Conakry",
     "areaKm2": 245717.0,
     "population": 14374590.0,
@@ -697,10 +775,14 @@
     "tvStations": 12.0,
     "urbanPopulation": 5476719.0,
     "population0_14": 5879207.0,
-    "populationBelowPoverty": 6281695.83
+    "populationBelowPoverty": 6281695.83,
+    "gdpUsdBn": 25.334,
+    "gdpPerCapitaUsd": 4000.0
   },
   {
     "iso3": "CIV",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "I. Coast",
     "areaKm2": 318003.0,
     "population": 31855971.0,
@@ -732,10 +814,14 @@
     "tvStations": 14.0,
     "urbanPopulation": 16915521.0,
     "population0_14": 11500006.0,
-    "populationBelowPoverty": 11945989.12
+    "populationBelowPoverty": 11945989.12,
+    "gdpUsdBn": 86.538,
+    "gdpPerCapitaUsd": 6700.0
   },
   {
     "iso3": "KEN",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Kenya",
     "areaKm2": 569140.0,
     "population": 55751717.0,
@@ -767,10 +853,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 16446757.0,
     "population0_14": 19959115.0,
-    "populationBelowPoverty": 21520162.76
+    "populationBelowPoverty": 21520162.76,
+    "gdpUsdBn": 124.499,
+    "gdpPerCapitaUsd": 5800.0
   },
   {
     "iso3": "LBR",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Liberia",
     "areaKm2": 96320.0,
     "population": 5563541.0,
@@ -802,10 +892,14 @@
     "tvStations": 9.0,
     "urbanPopulation": 2982058.0,
     "population0_14": 2164217.0,
-    "populationBelowPoverty": 2831842.37
+    "populationBelowPoverty": 2831842.37,
+    "gdpUsdBn": 4.75,
+    "gdpPerCapitaUsd": 1700.0
   },
   {
     "iso3": "MDG",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Madagascar",
     "areaKm2": 581540.0,
     "population": 31345040.0,
@@ -837,10 +931,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 12726086.0,
     "population0_14": 11597665.0,
-    "populationBelowPoverty": 19466788.28
+    "populationBelowPoverty": 19466788.28,
+    "gdpUsdBn": 17.421,
+    "gdpPerCapitaUsd": 1700.0
   },
   {
     "iso3": "MWI",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Malawi",
     "areaKm2": 94080.0,
     "population": 21763309.0,
@@ -872,10 +970,14 @@
     "tvStations": 6.0,
     "urbanPopulation": 3982686.0,
     "population0_14": 8204767.0,
-    "populationBelowPoverty": 391739.56
+    "populationBelowPoverty": 391739.56,
+    "gdpUsdBn": 11.009,
+    "gdpPerCapitaUsd": 1600.0
   },
   {
     "iso3": "MLI",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Mali",
     "areaKm2": 1220190.0,
     "population": 22634423.0,
@@ -907,10 +1009,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 10457103.0,
     "population0_14": 10592910.0,
-    "populationBelowPoverty": 10094952.66
+    "populationBelowPoverty": 10094952.66,
+    "gdpUsdBn": 26.588,
+    "gdpPerCapitaUsd": 2900.0
   },
   {
     "iso3": "MOZ",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Mozzambique",
     "areaKm2": 786380.0,
     "population": 34206144.0,
@@ -942,10 +1048,14 @@
     "tvStations": 5.0,
     "urbanPopulation": 13271984.0,
     "population0_14": 15290146.0,
-    "populationBelowPoverty": 14239383.67
+    "populationBelowPoverty": 14239383.67,
+    "gdpUsdBn": 22.417,
+    "gdpPerCapitaUsd": 1500.0
   },
   {
     "iso3": "NAM",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Namibia",
     "areaKm2": 823290.0,
     "population": 2852777.0,
@@ -977,10 +1087,14 @@
     "tvStations": 3.0,
     "urbanPopulation": 1566175.0,
     "population0_14": 972797.0,
-    "populationBelowPoverty": 466005.23
+    "populationBelowPoverty": 466005.23,
+    "gdpUsdBn": 13.372,
+    "gdpPerCapitaUsd": 10300.0
   },
   {
     "iso3": "NER",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Niger",
     "areaKm2": 1266700.0,
     "population": 27322555.0,
@@ -1012,10 +1126,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 4672157.0,
     "population0_14": 13524665.0,
-    "populationBelowPoverty": 12431762.53
+    "populationBelowPoverty": 12431762.53,
+    "gdpUsdBn": 19.538,
+    "gdpPerCapitaUsd": 1800.0
   },
   {
     "iso3": "NGA",
+    "mainCluster": "NG",
+    "subCluster": "NG",
     "country": "Nigeria",
     "areaKm2": 910768.0,
     "population": 244344065.0,
@@ -1047,10 +1165,14 @@
     "tvStations": 70.0,
     "urbanPopulation": 132678827.0,
     "population0_14": 98715002.0,
-    "populationBelowPoverty": 97981970.07
+    "populationBelowPoverty": 97981970.07,
+    "gdpUsdBn": 187.76,
+    "gdpPerCapitaUsd": 5700.0
   },
   {
     "iso3": "RWA",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Rwanda",
     "areaKm2": 24668.0,
     "population": 13623302.0,
@@ -1082,10 +1204,14 @@
     "tvStations": 13.0,
     "urbanPopulation": 2438571.0,
     "population0_14": 5067868.0,
-    "populationBelowPoverty": 5204101.36
+    "populationBelowPoverty": 5204101.36,
+    "gdpUsdBn": 14.252,
+    "gdpPerCapitaUsd": 3300.0
   },
   {
     "iso3": "STP",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Sao Tome & Principe",
     "areaKm2": 964.0,
     "population": 223561.0,
@@ -1117,10 +1243,14 @@
     "tvStations": 2.0,
     "urbanPopulation": 170801.0,
     "population0_14": 81376.0,
-    "populationBelowPoverty": 142703.32
+    "populationBelowPoverty": 142703.32,
+    "gdpUsdBn": 764.274,
+    "gdpPerCapitaUsd": 5500.0
   },
   {
     "iso3": "SEN",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Senegal",
     "areaKm2": 192530.0,
     "population": 18847519.0,
@@ -1152,10 +1282,14 @@
     "tvStations": 26.0,
     "urbanPopulation": 9348369.0,
     "population0_14": 7670940.0,
-    "populationBelowPoverty": 8801791.37
+    "populationBelowPoverty": 8801791.37,
+    "gdpUsdBn": 32.267,
+    "gdpPerCapitaUsd": 4500.0
   },
   {
     "iso3": "SLE",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Sierra Leone",
     "areaKm2": 71620.0,
     "population": 9331203.0,
@@ -1187,10 +1321,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 4133723.0,
     "population0_14": 3741812.0,
-    "populationBelowPoverty": 5300123.3
+    "populationBelowPoverty": 5300123.3,
+    "gdpUsdBn": 7.548,
+    "gdpPerCapitaUsd": 3100.0
   },
   {
     "iso3": "SOM",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Somalia",
     "areaKm2": 627337.0,
     "population": 20324160.0,
@@ -1222,10 +1360,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 9735273.0,
     "population0_14": 8414202.0,
-    "populationBelowPoverty": 11076667.2
+    "populationBelowPoverty": 11076667.2,
+    "gdpUsdBn": 12.109,
+    "gdpPerCapitaUsd": 1400.0
   },
   {
     "iso3": "ZAF",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "South Africa",
     "areaKm2": 1214470.0,
     "population": 61089926.0,
@@ -1257,10 +1399,14 @@
     "tvStations": 4.0,
     "urbanPopulation": 42029869.0,
     "population0_14": 16616460.0,
-    "populationBelowPoverty": 33904908.93
+    "populationBelowPoverty": 33904908.93,
+    "gdpUsdBn": 400.261,
+    "gdpPerCapitaUsd": 13600.0
   },
   {
     "iso3": "SSD",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "South Sudan",
     "areaKm2": null,
     "population": 12703714.0,
@@ -1292,10 +1438,14 @@
     "tvStations": 1.0,
     "urbanPopulation": 2693187.0,
     "population0_14": 5348264.0,
-    "populationBelowPoverty": 8391832.54
+    "populationBelowPoverty": 8391832.54,
+    "gdpUsdBn": 4.629,
+    "gdpPerCapitaUsd": 1600.0
   },
   {
     "iso3": "TZA",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Tanzania",
     "areaKm2": 885800.0,
     "population": 69145464.0,
@@ -1327,10 +1477,14 @@
     "tvStations": 2.0,
     "urbanPopulation": 25860404.0,
     "population0_14": 28487931.0,
-    "populationBelowPoverty": 18254402.5
+    "populationBelowPoverty": 18254402.5,
+    "gdpUsdBn": 78.78,
+    "gdpPerCapitaUsd": 3700.0
   },
   {
     "iso3": "TGO",
+    "mainCluster": "RoSSA",
+    "subCluster": "WA",
     "country": "Togo",
     "areaKm2": 54385.0,
     "population": 9143439.0,
@@ -1362,10 +1516,14 @@
     "tvStations": 6.0,
     "urbanPopulation": 4068830.0,
     "population0_14": 3538511.0,
-    "populationBelowPoverty": 4160264.75
+    "populationBelowPoverty": 4160264.75,
+    "gdpUsdBn": 9.926,
+    "gdpPerCapitaUsd": 2800.0
   },
   {
     "iso3": "UGA",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Uganda",
     "areaKm2": 197100.0,
     "population": 50863850.0,
@@ -1397,10 +1555,14 @@
     "tvStations": 35.0,
     "urbanPopulation": 13631512.0,
     "population0_14": 23906010.0,
-    "populationBelowPoverty": 10325361.55
+    "populationBelowPoverty": 10325361.55,
+    "gdpUsdBn": 53.652,
+    "gdpPerCapitaUsd": 2900.0
   },
   {
     "iso3": "ZMB",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Zambia",
     "areaKm2": 743398.0,
     "population": 22021971.0,
@@ -1432,10 +1594,14 @@
     "tvStations": 47.0,
     "urbanPopulation": 10196173.0,
     "population0_14": 9271250.0,
-    "populationBelowPoverty": 13213182.6
+    "populationBelowPoverty": 13213182.6,
+    "gdpUsdBn": 26.326,
+    "gdpPerCapitaUsd": 3700.0
   },
   {
     "iso3": "ZWE",
+    "mainCluster": "RoSSA",
+    "subCluster": "EESA",
     "country": "Zimbabwe",
     "areaKm2": 386847.0,
     "population": 17472752.0,
@@ -1467,6 +1633,8 @@
     "tvStations": 1.0,
     "urbanPopulation": 5678644.0,
     "population0_14": 6692064.0,
-    "populationBelowPoverty": 6692064.02
+    "populationBelowPoverty": 6692064.02,
+    "gdpUsdBn": 44.188,
+    "gdpPerCapitaUsd": 3500.0
   }
 ]

@@ -5,10 +5,10 @@ import {
   Tags,
   Store,
   Sparkles,
+  Globe2,
   CheckCircle2,
   RefreshCw,
   Users,
-  Globe2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -26,8 +26,8 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/audit-prix", label: "Audit Prix", icon: Tags, area: "audit-prix" },
   { href: "/merchandising", label: "Merchandising", icon: Store, area: "merchandising" },
   { href: "/analytics", label: "Analytics & Insights", icon: Sparkles, area: "analytics" },
+  { href: "/factbook", label: "Factbook FMCG", icon: Globe2, area: "factbook" },
   { href: "/validation", label: "Validation", icon: CheckCircle2, area: "validation" },
   { href: "/sync", label: "Synchronisation", icon: RefreshCw, area: "" },
   { href: "/admin", label: "Administration", icon: Users, area: "admin" },
-  { href: "/factbook", label: "Factbook FMCG", icon: Globe2, area: "factbook" },
 ];

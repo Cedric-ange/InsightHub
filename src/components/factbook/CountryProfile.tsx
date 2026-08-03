@@ -6,6 +6,8 @@ import {
   formatCount,
   formatPercent,
   formatText,
+  formatUsd,
+  formatUsdBn,
   type FactbookCountry,
 } from "@/lib/factbook";
 
@@ -30,8 +32,8 @@ export function CountryProfile({ country }: { country: FactbookCountry }) {
         />
         <StatCard
           label="PIB / habitant"
-          value={formatText(country.gdpPerCapita)}
-          hint={`PIB ${formatText(country.gdp)}`}
+          value={formatUsd(country.gdpPerCapitaUsd)}
+          hint={`Cluster ${country.subCluster} · PIB ${formatUsdBn(country.gdpUsdBn)}`}
           icon={<LineChart className="h-4 w-4" />}
           tone="green"
         />

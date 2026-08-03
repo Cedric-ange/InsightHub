@@ -35,6 +35,14 @@ ISO3 = {
     "South Africa": "ZAF", "Botswana": "BWA",
 }
 
+# Découpage business : NG (Nigeria) vs RoSSA (reste de l'Afrique subsaharienne),
+# affiné en sous-clusters WA (Afrique de l'Ouest hors Nigeria) et EESA (Est/Centre/Sud).
+WA_COUNTRIES = {
+    "I. Coast", "Senegal", "Gambia", "Guinea Bissau", "Sierra Leone", "Liberia",
+    "Guinea Conakry", "Burkina Faso", "Mali", "Niger", "Chad", "Cape Verde",
+    "Togo", "Benin", "Ghana",
+}
+
 # Colonne Excel -> (clé JSON, type). "rate" = fraction, "num" = nombre, "text" = chaîne.
 FIELDS = [
     ("Country", "country", "text"),
@@ -123,6 +131,18 @@ def parse_rate(value):
     return round(number, 6)
 
 
+def clusters(country: str):
+    if country == "Nigeria":
+        return "NG", "NG"
+    return "RoSSA", "WA" if country in WA_COUNTRIES else "EESA"
+
+
+def parse_usd(value, unit: float = 1.0):
+    """"$187.76 billion (2024 est.)" -> 187.76 ; "$5,700 (2024 est.)" -> 5700."""
+    number = parse_number(value)
+    return None if number is None else round(number * unit, 3)
+
+
 def main():
     frame = pd.read_excel(SOURCE)
     records = []
@@ -130,7 +150,12 @@ def main():
         country = clean_text(row.get("Country"))
         if country is None or country not in ISO3:
             continue  # lignes de regroupement ("India Ocean", "Islands"…)
-        record = {"iso3": ISO3[country]}
+        main_cluster, sub_cluster = clusters(country)
+        record = {
+            "iso3": ISO3[country],
+            "mainCluster": main_cluster,
+            "subCluster": sub_cluster,
+        }
         for column, key, kind in FIELDS:
             value = row.get(column)
             if kind == "text":
@@ -140,6 +165,9 @@ def main():
             else:
                 number = parse_number(value)
                 record[key] = round(number, 2) if number is not None else None
+        # Versions numériques des montants (graphiques : PIB en Md USD, PIB/hab. en USD).
+        record["gdpUsdBn"] = parse_usd(row.get("GDP (2024 est.) official ex rate"))
+        record["gdpPerCapitaUsd"] = parse_usd(row.get("GDP per capita (2019 est.)"))
         records.append(record)
 
     records.sort(key=lambda item: item["country"])
